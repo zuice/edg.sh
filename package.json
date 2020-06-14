@@ -1,0 +1,35 @@
+{
+  "name": "edg.sh",
+  "version": "0.1.0",
+  "description": "edg.sh",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "lerna exec npm install && npm run build:server",
+    "dev": "lerna run dev --parallel",
+    "build": "lerna run build --stream",
+    "build:app": "lerna run build --scope @edg.sh/app",
+    "build:server": "lerna run generate:prisma --scope @edg.sh/server && lerna run generate:nexus --scope @edg.sh/server && lerna run build --scope @edg.sh/server",
+    "start:server": "lerna run start --scope @edg.sh/server",
+    "prettier": "prettier --write \"**/*.{js,ts,tsx}\" \"!**/build/**\" --config .prettierrc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuice/edg.sh.git"
+  },
+  "author": "zuice <jeff.allen127@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zuice/edg.sh/issues"
+  },
+  "homepage": "https://github.com/zuice/edg.sh#readme",
+  "devDependencies": {
+    "create-react-app": "^3.4.1",
+    "lerna": "^3.22.1",
+    "prettier": "^2.0.5"
+  },
+  "dependencies": {
+    "@edg.sh/server": "file:packages/server",
+    "@edg.sh/web": "file:packages/web"
+  }
+}

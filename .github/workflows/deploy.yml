@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-server:
+    name: Deploy Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+      - id: dokku
+        name: Deploy to dokku
+        uses: vitalyliber/dokku-github-action@v4.0
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: 134.122.123.191
+          PROJECT: edgsh 
+  deploy-app:
+    name: Deploy App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+      - run: npm i -g lerna
+      - run: npm run bootstrap
+      - run: npm run build:app
+      - name: Build with netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=packages/app/build
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
