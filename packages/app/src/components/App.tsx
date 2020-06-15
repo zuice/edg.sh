@@ -8,10 +8,7 @@ import { Error404 } from '../routes/Error404';
 import { Container } from './Container';
 
 const client = createClient({
-  url:
-    process.env.NODE_ENV === 'production'
-      ? process.env.REACT_APP_GRAPHQL_URL!
-      : 'http://localhost:3001',
+  url: process.env.REACT_APP_GRAPHQL_URL!,
 });
 
 export const App = () => (

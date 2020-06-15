@@ -38,6 +38,7 @@ jobs:
         with:
           args: deploy --dir=packages/app/build
         env:
+          REACT_APP_GRAPHQL_URL: https://api.edg.sh/
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   deploy-landing:
