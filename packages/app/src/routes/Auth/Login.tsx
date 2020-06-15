@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   FormControl,
@@ -9,8 +9,12 @@ import {
   Button,
 } from '@chakra-ui/core';
 
+import { useLoginMutation } from '../../graphql';
+
 export const Login = () => {
+  const [authPayload, getAuthPayload] = useLoginMutation();
   const {
+    setErrors,
     handleSubmit,
     handleBlur,
     handleChange,
@@ -38,14 +42,24 @@ export const Login = () => {
         errors.password = 'Too short!';
       }
 
-      console.log(errors);
-
       return errors;
     },
     onSubmit: values => {
-      alert(JSON.stringify(values));
+      getAuthPayload({ ...values });
     },
   });
+
+  useEffect(() => {
+    if (authPayload.error) {
+      setErrors({ email: 'Incorrect password for given email.' });
+    }
+
+    if (authPayload.data) {
+      console.log(authPayload.data);
+
+      alert(authPayload.data.login.token);
+    }
+  }, [authPayload, setErrors]);
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
@@ -57,6 +71,7 @@ export const Login = () => {
           aria-describedby="email-helper-text"
           placeholder="john@example.org"
           value={values.email}
+          isDisabled={authPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -76,6 +91,7 @@ export const Login = () => {
           aria-describedby="password-helper-text"
           placeholder="superSecret!!231@"
           value={values.password}
+          isDisabled={authPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -85,7 +101,9 @@ export const Login = () => {
         <FormErrorMessage>{errors.password}</FormErrorMessage>
       </FormControl>
       <fieldset>
-        <Button type="submit">Login</Button>
+        <Button isLoading={authPayload.fetching} type="submit">
+          Login
+        </Button>
       </fieldset>
     </form>
   );

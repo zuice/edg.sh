@@ -1,0 +1,12 @@
+overwrite: true
+schema: packages/server/schema.graphql
+documents: packages/app/operation.graphql
+generates:
+  packages/app/src/graphql.ts:
+    config:
+      withHooks: true
+      withComponent: false
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'

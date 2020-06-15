@@ -12,7 +12,8 @@
     "build:server": "lerna run generate:prisma --scope @edg.sh/server && lerna run generate:nexus --scope @edg.sh/server && lerna run build --scope @edg.sh/server",
     "start:server": "lerna run start --scope @edg.sh/server",
     "prettier": "prettier --write \"**/*.{js,ts,tsx}\" \"!**/build/**\" --config .prettierrc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate:schema": "graphql-codegen --config codegen.yml"
   },
   "repository": {
     "type": "git",
@@ -25,13 +26,15 @@
   },
   "homepage": "https://github.com/zuice/edg.sh#readme",
   "devDependencies": {
+    "@graphql-codegen/cli": "1.15.3",
+    "@graphql-codegen/introspection": "1.15.3",
+    "@graphql-codegen/typescript": "^1.15.3",
+    "@graphql-codegen/typescript-operations": "^1.15.3",
+    "@graphql-codegen/typescript-react-apollo": "1.15.3",
+    "@graphql-codegen/typescript-urql": "^1.15.3",
     "create-react-app": "^3.4.1",
+    "graphql": "^15.1.0",
     "lerna": "^3.22.1",
     "prettier": "^2.0.5"
-  },
-  "dependencies": {
-    "@edg.sh/server": "file:packages/server",
-    "@edg.sh/app": "file:packages/app",
-    "@edg.sh/landing": "file:packages/landing"
   }
 }

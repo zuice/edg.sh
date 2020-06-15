@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "CI=true react-scripts start",
+    "dev": "CI=true BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "netlify deploy --prod --dir build"
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",

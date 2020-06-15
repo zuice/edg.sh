@@ -10,8 +10,8 @@ export const schema = makeSchema({
   types: [AuthPayload, User, Query, Mutation],
   plugins: [nexusPrismaPlugin()],
   outputs: {
-    schema: __dirname + '/../../schema.graphql',
-    typegen: __dirname + '/../generated/nexus.ts',
+    schema: `${__dirname}/../../schema.graphql`,
+    typegen: `${__dirname}/../generated/nexus.ts`,
   },
   typegenAutoConfig: {
     contextType: 'Context.Context',
