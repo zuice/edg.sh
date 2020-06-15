@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.x
+        env:
+          REACT_APP_GRAPHQL_URL: https://api.edg.sh
       - run: npm i -g lerna
       - run: npm run bootstrap
       - run: npm run build:app
@@ -38,7 +40,6 @@ jobs:
         with:
           args: deploy --dir=packages/app/build
         env:
-          REACT_APP_GRAPHQL_URL: https://api.edg.sh/
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   deploy-landing:
