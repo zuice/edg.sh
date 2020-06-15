@@ -38,7 +38,7 @@ jobs:
         with:
           args: deploy --dir=packages/app/build
         env:
-          NETLIFY_APP_ID: ${{ secrets.NETLIFY_APP_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
   deploy-landing:
     name: Deploy Landing
@@ -58,5 +58,5 @@ jobs:
         with:
           args: deploy --dir=packages/app/build
         env:
-          NETLIFY_LANDING_ID: ${{ secrets.NETLIFY_LANDING_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_LANDING_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
