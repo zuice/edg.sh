@@ -4,7 +4,7 @@
   "description": "edg.sh",
   "main": "index.js",
   "scripts": {
-    "bootstrap": "lerna exec npm install && npm run build:server",
+    "bootstrap": "lerna exec npm install",
     "dev": "lerna run dev --parallel",
     "build": "lerna run build --stream",
     "build:app": "lerna run build --scope @edg.sh/app",

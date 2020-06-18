@@ -10,6 +10,7 @@ COPY . .
 
 # Run this after so that we can get all the stuff for the monorepo
 RUN npm run bootstrap
+RUN npm run build:server
 
 EXPOSE 3001
 CMD ["npm", "run", "start:server"] 
