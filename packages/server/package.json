@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/server",
-    "start": "NODE_ENV=production node dist/server",
+    "start": "npm run migrate && NODE_ENV=production node dist/server",
     "clean": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
     "eslint": "eslint . --ext ts,tsx",

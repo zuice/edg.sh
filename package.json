@@ -9,7 +9,7 @@
     "build": "lerna run build --stream",
     "build:app": "lerna run build --scope @edg.sh/app",
     "build:landing": "lerna run build --scope @edg.sh/landing && lerna run export --scope @edg.sh/landing",
-    "build:server": "lerna run generate:prisma --scope @edg.sh/server && lerna run generate:nexus --scope @edg.sh/server && lerna run build --scope @edg.sh/server && lerna run migrate --scope @edg.sh/server",
+    "build:server": "lerna run generate:prisma --scope @edg.sh/server && lerna run generate:nexus --scope @edg.sh/server && lerna run build --scope @edg.sh/server",
     "start:server": "lerna run start --scope @edg.sh/server",
     "prettier": "prettier --write \"**/*.{js,ts,tsx}\" \"!**/build/**\" --config .prettierrc",
     "test": "echo \"Error: no test specified\" && exit 1",
