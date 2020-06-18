@@ -20,6 +20,7 @@ jobs:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           HOST: 134.122.123.191
           PROJECT: edgsh
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
   deploy-app:
     name: Deploy App
     runs-on: ubuntu-latest
