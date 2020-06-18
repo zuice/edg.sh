@@ -8,12 +8,12 @@
     "clean": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
     "eslint": "eslint . --ext ts,tsx",
+    "migrate": "npx prisma migrate up --experimental",
     "generate:prisma": "npx prisma generate",
     "generate:nexus": "npx ts-node --transpile-only src/schema"
   },
   "dependencies": {
     "@nexus/schema": "0.13.1",
-    "@prisma/cli": "^2.0.0-beta.8",
     "@prisma/client": "^2.0.0-beta.8",
     "bcryptjs": "2.4.3",
     "bluebird": "^3.7.2",
@@ -29,6 +29,7 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "@prisma/cli": "^2.0.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.5.32",
     "@types/express": "^4.17.6",
