@@ -128,7 +128,7 @@ export const Register = () => {
       </FormControl>
       <fieldset>
         <Button isLoading={authPayload.fetching} type="submit">
-          Login
+          Register
         </Button>
       </fieldset>
     </form>
