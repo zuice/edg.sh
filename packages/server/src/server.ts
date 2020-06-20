@@ -26,7 +26,7 @@ app.express.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? 'https://app.edg.sh/'
+        ? 'https://app.edg.sh'
         : process.env.REACT_APP_URL,
     credentials: true,
   }),
@@ -65,7 +65,7 @@ app.start(
     cors: {
       origin:
         process.env.NODE_ENV === 'production'
-          ? 'https://app.edg.sh/'
+          ? 'https://app.edg.sh'
           : process.env.REACT_APP_URL,
       credentials: true,
     },
