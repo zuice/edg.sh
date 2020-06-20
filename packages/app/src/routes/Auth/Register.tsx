@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
   FormControl,
@@ -10,9 +11,12 @@ import {
 } from '@chakra-ui/core';
 
 import { useRegisterMutation } from '../../graphql';
+import { AuthContext } from '../../context/AuthContext';
 
 export const Register = () => {
   const [authPayload, getAuthPayload] = useRegisterMutation();
+  const { setAccessToken } = useContext(AuthContext);
+  const { push } = useHistory();
   const {
     setErrors,
     handleSubmit,
@@ -55,13 +59,16 @@ export const Register = () => {
 
   useEffect(() => {
     if (authPayload.error) {
-      setErrors({ email: 'Account already exists with email given.' });
+      setErrors({ email: 'Account already exists for given email.' });
     }
 
-    if (authPayload.data) {
-      alert(authPayload.data.register.token);
+    if (authPayload.data && !authPayload.fetching) {
+      const { token } = authPayload.data.register;
+
+      setAccessToken(token);
+      push('/');
     }
-  }, [authPayload, setErrors]);
+  }, [authPayload, setErrors, setAccessToken, push]);
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off">

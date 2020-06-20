@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
   FormControl,
@@ -10,9 +11,12 @@ import {
 } from '@chakra-ui/core';
 
 import { useLoginMutation } from '../../graphql';
+import { AuthContext } from '../../context/AuthContext';
 
 export const Login = () => {
   const [authPayload, getAuthPayload] = useLoginMutation();
+  const { setAccessToken } = useContext(AuthContext);
+  const { push } = useHistory();
   const {
     setErrors,
     handleSubmit,
@@ -45,7 +49,7 @@ export const Login = () => {
       return errors;
     },
     onSubmit: values => {
-      getAuthPayload({ ...values });
+      getAuthPayload({ ...values }, { requestPolicy: 'network-only' });
     },
   });
 
@@ -54,12 +58,13 @@ export const Login = () => {
       setErrors({ email: 'Incorrect password for given email.' });
     }
 
-    if (authPayload.data) {
-      console.log(authPayload.data);
+    if (authPayload.data && !authPayload.fetching) {
+      const { token } = authPayload.data.login;
 
-      alert(authPayload.data.login.token);
+      setAccessToken(token);
+      push('/');
     }
-  }, [authPayload, setErrors]);
+  }, [authPayload, setErrors, setAccessToken, push]);
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
@@ -102,7 +107,7 @@ export const Login = () => {
       </FormControl>
       <fieldset>
         <Button isLoading={authPayload.fetching} type="submit">
-          Login
+          Register
         </Button>
       </fieldset>
     </form>

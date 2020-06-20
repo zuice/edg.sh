@@ -21,6 +21,8 @@ export type AuthPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: AuthPayload;
+  logout: Scalars['Boolean'];
+  refresh: AuthPayload;
   register: AuthPayload;
 };
 
@@ -88,6 +90,29 @@ export type RegisterMutation = (
   ) }
 );
 
+export type RefreshMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RefreshMutation = (
+  { __typename?: 'Mutation' }
+  & { refresh: (
+    { __typename?: 'AuthPayload' }
+    & Pick<AuthPayload, 'token'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    ) }
+  ) }
+);
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
+
 
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
@@ -116,4 +141,27 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const RefreshDocument = gql`
+    mutation Refresh {
+  refresh {
+    token
+    user {
+      id
+    }
+  }
+}
+    `;
+
+export function useRefreshMutation() {
+  return Urql.useMutation<RefreshMutation, RefreshMutationVariables>(RefreshDocument);
+};
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };

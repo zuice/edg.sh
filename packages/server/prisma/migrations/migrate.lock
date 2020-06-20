@@ -12,3 +12,4 @@
 20200529121209-add-stripe-id-with-default-value
 20200529121239-remove-default-and-add-unique
 20200529122442-allow-stripe-id-to-be-nullable
+20200619021803-add-a-token-version-so-it-can-t-be-used-after-a-user-logs-out-or-it-expires

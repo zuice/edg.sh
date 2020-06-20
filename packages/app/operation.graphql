@@ -15,3 +15,16 @@ mutation Register($name: String!, $email: String!, $password: String!) {
     }
   }
 }
+
+mutation Refresh {
+  refresh {
+    token
+    user {
+      id
+    }
+  }
+}
+
+mutation Logout {
+  logout
+}

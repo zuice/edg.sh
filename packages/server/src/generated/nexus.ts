@@ -54,10 +54,11 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    logout: boolean; // Boolean!
+    refresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Query: { // field return type
-    logout: boolean; // Boolean!
     me: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
