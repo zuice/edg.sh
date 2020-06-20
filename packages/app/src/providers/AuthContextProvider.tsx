@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import { UseMutationState } from 'urql';
 
 import { AuthContext } from '../context/AuthContext';
@@ -28,17 +27,14 @@ export const AuthContextProvider: FC = ({ children }) => {
   const [, getLogoutPayload] = useLogoutMutation();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
     if (accessToken) {
       setIsLoggedIn(true);
-      history.push('/');
     } else {
       setIsLoggedIn(false);
-      history.push('/auth/login');
     }
-  }, [accessToken, history]);
+  }, [accessToken]);
 
   useEffect(() => {
     const getRefreshToken = async () => {
@@ -72,11 +68,11 @@ export const AuthContextProvider: FC = ({ children }) => {
   }, [urqlRegisterPayload, setAccessToken]);
 
   const handleLogin = (values: LoginMutationVariables) => {
-    getLoginPayload(values);
+    getLoginPayload(values, { requestPolicy: 'network-only' });
   };
 
   const handleRegister = (values: RegisterMutationVariables) => {
-    getRegisterPayload(values);
+    getRegisterPayload(values, { requestPolicy: 'network-only' });
   };
 
   const handleLogout = () => {

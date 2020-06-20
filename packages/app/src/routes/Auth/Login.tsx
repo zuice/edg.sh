@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
+import { Redirect } from 'react-router-dom';
 import {
   FormControl,
   FormLabel,
@@ -55,6 +56,10 @@ export const Login = () => {
       setErrors({ email: 'User by given email does not exist.' });
     }
   }, [loginPayload.error, setErrors]);
+
+  if (loginPayload.data) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off" style={{ width: '100%' }}>
