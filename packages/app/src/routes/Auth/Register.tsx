@@ -82,7 +82,7 @@ export const Register = () => {
         </FormHelperText>
         <FormErrorMessage>{errors.name}</FormErrorMessage>
       </FormControl>
-      <FormControl as="fieldset" isInvalid={touched.name && !!errors.name}>
+      <FormControl as="fieldset" isInvalid={touched.email && !!errors.email}>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
           type="email"
