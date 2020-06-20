@@ -6,17 +6,20 @@ import {
   CSSReset,
 } from '@chakra-ui/core';
 import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import { AuthContextProvider } from './providers/AuthContextProvider';
+import { AppContextProvider } from './providers/AppContextProvider';
 import { App } from './components/App';
 
 render(
   <ColorModeProvider>
     <ThemeProvider theme={theme}>
       <CSSReset />
-      <AuthContextProvider>
-        <App />
-      </AuthContextProvider>
+      <BrowserRouter>
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
+      </BrowserRouter>
     </ThemeProvider>
   </ColorModeProvider>,
   document.getElementById('root'),

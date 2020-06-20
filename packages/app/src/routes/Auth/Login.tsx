@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   FormControl,
@@ -10,13 +9,11 @@ import {
   Button,
 } from '@chakra-ui/core';
 
-import { useLoginMutation } from '../../graphql';
 import { AuthContext } from '../../context/AuthContext';
+import { Link } from '../../components/Link';
 
 export const Login = () => {
-  const [authPayload, getAuthPayload] = useLoginMutation();
-  const { setAccessToken } = useContext(AuthContext);
-  const { push } = useHistory();
+  const { loginPayload, handleLogin } = useContext(AuthContext);
   const {
     setErrors,
     handleSubmit,
@@ -49,25 +46,18 @@ export const Login = () => {
       return errors;
     },
     onSubmit: values => {
-      getAuthPayload({ ...values }, { requestPolicy: 'network-only' });
+      handleLogin(values);
     },
   });
 
   useEffect(() => {
-    if (authPayload.error) {
-      setErrors({ email: 'Incorrect password for given email.' });
+    if (loginPayload.error) {
+      setErrors({ email: 'User by given email does not exist.' });
     }
-
-    if (authPayload.data && !authPayload.fetching) {
-      const { token } = authPayload.data.login;
-
-      setAccessToken(token);
-      push('/');
-    }
-  }, [authPayload, setErrors, setAccessToken, push]);
+  }, [loginPayload.error, setErrors]);
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off">
+    <form onSubmit={handleSubmit} autoComplete="off" style={{ width: '100%' }}>
       <FormControl as="fieldset" isInvalid={touched.email && !!errors.email}>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
@@ -76,7 +66,7 @@ export const Login = () => {
           aria-describedby="email-helper-text"
           placeholder="john@example.org"
           value={values.email}
-          isDisabled={authPayload.fetching}
+          isDisabled={loginPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -96,7 +86,7 @@ export const Login = () => {
           aria-describedby="password-helper-text"
           placeholder="superSecret!!231@"
           value={values.password}
-          isDisabled={authPayload.fetching}
+          isDisabled={loginPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -106,9 +96,10 @@ export const Login = () => {
         <FormErrorMessage>{errors.password}</FormErrorMessage>
       </FormControl>
       <fieldset>
-        <Button isLoading={authPayload.fetching} type="submit">
+        <Button isLoading={loginPayload.fetching} type="submit">
           Login
-        </Button>
+        </Button>{' '}
+        or <Link to="/auth/register">Register</Link>
       </fieldset>
     </form>
   );

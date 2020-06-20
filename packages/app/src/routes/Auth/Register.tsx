@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   FormControl,
@@ -10,13 +9,11 @@ import {
   Button,
 } from '@chakra-ui/core';
 
-import { useRegisterMutation } from '../../graphql';
 import { AuthContext } from '../../context/AuthContext';
+import { Link } from '../../components/Link';
 
 export const Register = () => {
-  const [authPayload, getAuthPayload] = useRegisterMutation();
-  const { setAccessToken } = useContext(AuthContext);
-  const { push } = useHistory();
+  const { registerPayload, handleRegister } = useContext(AuthContext);
   const {
     setErrors,
     handleSubmit,
@@ -29,9 +26,12 @@ export const Register = () => {
     initialValues: { name: '', email: '', password: '' },
     validate: values => {
       const errors = {} as { name?: string; email?: string; password?: string };
+      const nameSplit = values.name.split(' ');
 
-      if (values.name.length < 4) {
-        errors.name = 'Name too short!';
+      if (!values.name) {
+        errors.name = 'Required!';
+      } else if (nameSplit.length <= 1) {
+        errors.name = 'Please provide first and last name.';
       }
 
       if (!values.email) {
@@ -53,25 +53,18 @@ export const Register = () => {
       return errors;
     },
     onSubmit: values => {
-      getAuthPayload({ ...values });
+      handleRegister(values);
     },
   });
 
   useEffect(() => {
-    if (authPayload.error) {
+    if (registerPayload.error) {
       setErrors({ email: 'Account already exists for given email.' });
     }
-
-    if (authPayload.data && !authPayload.fetching) {
-      const { token } = authPayload.data.register;
-
-      setAccessToken(token);
-      push('/');
-    }
-  }, [authPayload, setErrors, setAccessToken, push]);
+  }, [registerPayload.error, setErrors]);
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off">
+    <form autoComplete="off" onSubmit={handleSubmit} style={{ width: '100%' }}>
       <FormControl as="fieldset" isInvalid={touched.name && !!errors.name}>
         <FormLabel htmlFor="name">Name</FormLabel>
         <Input
@@ -80,16 +73,16 @@ export const Register = () => {
           aria-describedby="name-helper-text"
           placeholder="John Smith"
           value={values.name}
-          isDisabled={authPayload.fetching}
+          isDisabled={registerPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
-        <FormHelperText id="name-helper-text">
-          We'll never share your email.
+        <FormHelperText id="email-helper-text">
+          What should we refer to you as?
         </FormHelperText>
         <FormErrorMessage>{errors.name}</FormErrorMessage>
       </FormControl>
-      <FormControl as="fieldset" isInvalid={touched.email && !!errors.email}>
+      <FormControl as="fieldset" isInvalid={touched.name && !!errors.name}>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
           type="email"
@@ -97,7 +90,7 @@ export const Register = () => {
           aria-describedby="email-helper-text"
           placeholder="john@example.org"
           value={values.email}
-          isDisabled={authPayload.fetching}
+          isDisabled={registerPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -117,7 +110,7 @@ export const Register = () => {
           aria-describedby="password-helper-text"
           placeholder="superSecret!!231@"
           value={values.password}
-          isDisabled={authPayload.fetching}
+          isDisabled={registerPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
         />
@@ -127,9 +120,10 @@ export const Register = () => {
         <FormErrorMessage>{errors.password}</FormErrorMessage>
       </FormControl>
       <fieldset>
-        <Button isLoading={authPayload.fetching} type="submit">
+        <Button isLoading={registerPayload.fetching} type="submit">
           Register
-        </Button>
+        </Button>{' '}
+        or <Link to="/auth/Login">Login</Link>
       </fieldset>
     </form>
   );
