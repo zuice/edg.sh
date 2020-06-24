@@ -1,15 +1,3 @@
 # Prisma Migrate lockfile v1
 
-20200527220816-initial
-20200527221341-add-user-model
-20200527224225-add-passwored
-20200529004249-add-plan
-20200529011202-add-unique-to-name
-20200529102554-plans-wil-be-stored-in-stripe
-20200529115915-add-stripe-id-to-user
-20200529120102-add-default-value-to-stripe-id
-20200529120936-add-default-remove-unique
-20200529121209-add-stripe-id-with-default-value
-20200529121239-remove-default-and-add-unique
-20200529122442-allow-stripe-id-to-be-nullable
-20200619021803-add-a-token-version-so-it-can-t-be-used-after-a-user-logs-out-or-it-expires
+20200623233503-initial

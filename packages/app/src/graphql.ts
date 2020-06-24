@@ -18,12 +18,27 @@ export type AuthPayload = {
   user: User;
 };
 
+export type Link = {
+  __typename?: 'Link';
+  id: Scalars['String'];
+  slug: Scalars['String'];
+  url: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createLink: Link;
   login: AuthPayload;
   logout: Scalars['Boolean'];
   refresh: AuthPayload;
   register: AuthPayload;
+};
+
+
+export type MutationCreateLinkArgs = {
+  url: Scalars['String'];
 };
 
 
@@ -41,17 +56,40 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  logout: Scalars['Boolean'];
+  links: Array<Link>;
   me?: Maybe<User>;
 };
 
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
-  id: Scalars['ID'];
+  id: Scalars['String'];
+  links: Array<Link>;
   name: Scalars['String'];
+  password: Scalars['String'];
   stripeId?: Maybe<Scalars['String']>;
+  tokenVersion: Scalars['Int'];
 };
+
+
+export type UserLinksArgs = {
+  skip?: Maybe<Scalars['Int']>;
+};
+
+export type LinksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LinksQuery = (
+  { __typename?: 'Query' }
+  & { links: Array<(
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'slug' | 'url'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name' | 'email'>
+    ) }
+  )> }
+);
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -113,7 +151,42 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type CreateLinkMutationVariables = Exact<{
+  url: Scalars['String'];
+}>;
 
+
+export type CreateLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { createLink: (
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'slug' | 'url'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    ) }
+  ) }
+);
+
+
+export const LinksDocument = gql`
+    query Links {
+  links {
+    id
+    slug
+    url
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+    `;
+
+export function useLinksQuery(options: Omit<Urql.UseQueryArgs<LinksQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<LinksQuery>({ query: LinksDocument, ...options });
+};
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -164,4 +237,20 @@ export const LogoutDocument = gql`
 
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
+export const CreateLinkDocument = gql`
+    mutation CreateLink($url: String!) {
+  createLink(url: $url) {
+    id
+    slug
+    url
+    user {
+      id
+    }
+  }
+}
+    `;
+
+export function useCreateLinkMutation() {
+  return Urql.useMutation<CreateLinkMutation, CreateLinkMutationVariables>(CreateLinkDocument);
 };

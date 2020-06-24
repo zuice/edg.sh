@@ -4,6 +4,8 @@ import { sendRefreshToken } from '../utils/sendRefreshToken';
 import { createRefreshToken, createAccessToken } from '../auth';
 import { verify, decode } from 'jsonwebtoken';
 import { IToken } from '../types/IToken';
+import { getUserId } from '../utils/getUserId';
+import { generateSlug } from '../utils/generateSlug';
 
 export const Mutation = mutationType({
   definition(t) {
@@ -109,6 +111,23 @@ export const Mutation = mutationType({
         const token = createAccessToken(user);
 
         return { token, user };
+      },
+    });
+
+    t.field('createLink', {
+      type: 'Link',
+      args: {
+        url: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { url }, ctx) => {
+        const id = getUserId(ctx);
+        const slug = generateSlug();
+
+        const link = ctx.prisma.link.create({
+          data: { url, slug, user: { connect: { id } } },
+        });
+
+        return link;
       },
     });
   },

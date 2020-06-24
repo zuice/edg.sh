@@ -16,9 +16,11 @@ export const NavbarLeft = () => {
       <ButtonLink
         to="/links"
         leftIcon="link"
-        variant={history.location.pathname === '/links' ? 'solid' : 'ghost'}
+        variant={
+          history.location.pathname.indexOf('links') >= 0 ? 'solid' : 'ghost'
+        }
         variantColor={
-          history.location.pathname === '/links' ? 'green' : undefined
+          history.location.pathname.indexOf('links') >= 0 ? 'green' : undefined
         }
         marginLeft="10px"
       >
@@ -27,10 +29,15 @@ export const NavbarLeft = () => {
       <ButtonLink
         to="/upgrade"
         leftIcon="star"
-        variant={history.location.pathname === '/upgrade' ? 'solid' : 'ghost'}
-        variantColor={
-          history.location.pathname === '/upgrade' ? 'green' : undefined
+        variant={
+          history.location.pathname.indexOf('upgrade') >= 0 ? 'solid' : 'ghost'
         }
+        variantColor={
+          history.location.pathname.indexOf('upgrade') >= 0
+            ? 'green'
+            : undefined
+        }
+        marginLeft="10px"
       >
         Upgrade
       </ButtonLink>

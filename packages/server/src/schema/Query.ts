@@ -14,5 +14,16 @@ export const Query = queryType({
         return user;
       },
     });
+
+    t.field('links', {
+      type: 'Link',
+      list: true,
+      resolve: async (_parent, _args, ctx) => {
+        const userId = getUserId(ctx);
+        const links = await ctx.prisma.link.findMany({ where: { userId } });
+
+        return links;
+      },
+    });
   },
 });

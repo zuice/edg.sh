@@ -33,6 +33,7 @@ const rules = {
 export const permissions = shield({
   Query: {
     me: rules.isAuthenticated,
+    links: rules.isAuthenticated,
   },
   Mutation: {
     login: rules.isUnauthenticated,

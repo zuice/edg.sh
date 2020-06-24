@@ -16,7 +16,7 @@ export const Dashboard = () => (
           path="/"
           component={() => <span>Welcome to your dashboard.</span>}
         />
-        <Route exact path="/links" component={Links} />
+        <Route path="/links" component={Links} />
         <Route path="*" component={Error404} />
       </Switch>
     </Container>

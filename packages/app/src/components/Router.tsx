@@ -11,11 +11,11 @@ export const Router = () => {
 
   if (isLoading) {
     return (
-      <div>
+      <>
         <Skeleton height="20px" my="10px" />
         <Skeleton height="20px" my="10px" />
         <Skeleton height="20px" my="10px" />
-      </div>
+      </>
     );
   }
 

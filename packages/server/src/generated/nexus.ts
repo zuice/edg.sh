@@ -29,13 +29,21 @@ export interface NexusGenRootTypes {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Link: { // root type
+    id: string; // String!
+    slug: string; // String!
+    url: string; // String!
+    userId: string; // String!
+  }
   Mutation: {};
   Query: {};
   User: { // root type
     email: string; // String!
-    id: string; // ID!
+    id: string; // String!
     name: string; // String!
+    password: string; // String!
     stripeId?: string | null; // String
+    tokenVersion: number; // Int!
   }
   String: string;
   Int: number;
@@ -52,25 +60,40 @@ export interface NexusGenFieldTypes {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Link: { // field return type
+    id: string; // String!
+    slug: string; // String!
+    url: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
+  }
   Mutation: { // field return type
+    createLink: NexusGenRootTypes['Link']; // Link!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: boolean; // Boolean!
     refresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Query: { // field return type
+    links: NexusGenRootTypes['Link'][]; // [Link!]!
     me: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
     email: string; // String!
-    id: string; // ID!
+    id: string; // String!
+    links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
+    password: string; // String!
     stripeId: string | null; // String
+    tokenVersion: number; // Int!
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createLink: { // args
+      url: string; // String!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
@@ -81,6 +104,11 @@ export interface NexusGenArgTypes {
       password: string; // String!
     }
   }
+  User: {
+    links: { // args
+      skip?: number | null; // Int
+    }
+  }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
@@ -88,7 +116,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AuthPayload" | "Mutation" | "Query" | "User";
+export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Query" | "User";
 
 export type NexusGenInputNames = never;
 

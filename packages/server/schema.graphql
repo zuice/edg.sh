@@ -7,7 +7,16 @@ type AuthPayload {
   user: User!
 }
 
+type Link {
+  id: String!
+  slug: String!
+  url: String!
+  user: User!
+  userId: String!
+}
+
 type Mutation {
+  createLink(url: String!): Link!
   login(email: String!, password: String!): AuthPayload!
   logout: Boolean!
   refresh: AuthPayload!
@@ -15,12 +24,16 @@ type Mutation {
 }
 
 type Query {
+  links: [Link!]!
   me: User
 }
 
 type User {
   email: String!
-  id: ID!
+  id: String!
+  links(skip: Int): [Link!]!
   name: String!
+  password: String!
   stripeId: String
+  tokenVersion: Int!
 }

@@ -12,7 +12,7 @@ export const Container: FC<IContainerProps> = ({
   alignItems,
 }) => (
   <Flex
-    width="95%"
+    width={['95%', '95%', '75%']}
     height="100%"
     margin="0 auto"
     flex="1"
