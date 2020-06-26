@@ -58,6 +58,16 @@ app.express.post('/refresh', async (req: Request, res: Response) => {
     return res.json({ token: '' });
   }
 });
+app.get('/:slug', async (req: Request, res: Response) => {
+  const { slug } = req.params as { slug: string };
+  const link = await prisma.link.findOne({ where: { slug } });
+
+  if (link) {
+    return res.redirect(link.url);
+  }
+
+  return res.send(404);
+});
 app.start(
   {
     port,

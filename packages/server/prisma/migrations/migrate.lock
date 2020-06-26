@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20200623233503-initial
+20200626022739-make-link-slugs-unique
