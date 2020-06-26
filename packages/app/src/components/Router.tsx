@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { Skeleton } from '@chakra-ui/core';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { AuthContext } from '../context/AuthContext';
+import { Loading } from './Loading';
 import { Auth } from '../routes/Auth';
 import { Dashboard } from '../routes/Dashboard';
 
@@ -10,13 +10,7 @@ export const Router = () => {
   const { isLoading, isLoggedIn } = useContext(AuthContext);
 
   if (isLoading) {
-    return (
-      <>
-        <Skeleton height="20px" my="10px" />
-        <Skeleton height="20px" my="10px" />
-        <Skeleton height="20px" my="10px" />
-      </>
-    );
+    return <Loading />;
   }
 
   if (isLoggedIn) {

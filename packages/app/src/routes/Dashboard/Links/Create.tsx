@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
+  useToast,
   FormControl,
   FormLabel,
   Input,
@@ -14,6 +15,7 @@ import { useCreateLinkMutation } from '../../../graphql';
 
 export const Create = () => {
   const [createLinkPayload, getCreateLinkPayload] = useCreateLinkMutation();
+  const toast = useToast();
   const history = useHistory();
   const {
     setErrors,
@@ -49,9 +51,16 @@ export const Create = () => {
     }
 
     if (createLinkPayload.data) {
+      toast({
+        title: 'Created',
+        description: `Your link: "https://edg.sh/${createLinkPayload.data.createLink.slug}" has been created.`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
       history.push('/links');
     }
-  }, [createLinkPayload, setErrors, history]);
+  }, [createLinkPayload, setErrors, toast, history]);
 
   return (
     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
