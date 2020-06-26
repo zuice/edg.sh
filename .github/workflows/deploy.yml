@@ -59,7 +59,7 @@ jobs:
       - name: Build with netlify
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=packages/app/build
+          args: deploy --dir=packages/landing/out
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_LANDING_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
