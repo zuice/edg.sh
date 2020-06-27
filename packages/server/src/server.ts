@@ -63,7 +63,7 @@ app.get('/:slug', async (req: Request, res: Response) => {
   const link = await prisma.link.findOne({ where: { slug } });
 
   if (link) {
-    return res.redirect(link.url);
+    return res.redirect(link.url, 301);
   }
 
   return res.send(404);
