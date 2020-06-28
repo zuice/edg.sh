@@ -64,11 +64,11 @@ app.get('/:slug', async (req: Request, res: Response) => {
     where: { slug },
     include: { organization: true },
   });
-  const host = req.get('host') as string;
+  const host = req.hostname;
 
   if (link) {
     if (link.organization) {
-      if (host.indexOf(link.organization.domain) >= 0) {
+      if (link.organization.domain.indexOf(host) >= 0 || host === 'edg.sh') {
         return res.redirect(301, link.url);
       }
 
