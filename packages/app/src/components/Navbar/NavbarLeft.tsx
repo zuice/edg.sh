@@ -27,6 +27,19 @@ export const NavbarLeft = () => {
         My Links
       </ButtonLink>
       <ButtonLink
+        to="/orgs"
+        leftIcon="chat"
+        variant={
+          history.location.pathname.indexOf('orgs') >= 0 ? 'solid' : 'ghost'
+        }
+        variantColor={
+          history.location.pathname.indexOf('orgs') >= 0 ? 'green' : undefined
+        }
+        marginLeft="10px"
+      >
+        My Orgs
+      </ButtonLink>
+      <ButtonLink
         to="/upgrade"
         leftIcon="star"
         variant={

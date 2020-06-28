@@ -2,3 +2,6 @@
 
 20200623233503-initial
 20200626022739-make-link-slugs-unique
+20200627212251-add-table-for-organizations
+20200627215001-add-timestamps-to-each-model
+20200628161847-add-created-at

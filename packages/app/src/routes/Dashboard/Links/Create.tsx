@@ -9,11 +9,16 @@ import {
   FormHelperText,
   FormErrorMessage,
   Button,
+  Select,
 } from '@chakra-ui/core';
 
-import { useCreateLinkMutation } from '../../../graphql';
+import {
+  useCreateLinkMutation,
+  useOrganizationsDropdownQuery,
+} from '../../../graphql';
 
 export const Create = () => {
+  const [organizationsPayload] = useOrganizationsDropdownQuery();
   const [createLinkPayload, getCreateLinkPayload] = useCreateLinkMutation();
   const toast = useToast();
   const history = useHistory();
@@ -26,7 +31,7 @@ export const Create = () => {
     handleBlur,
     handleChange,
   } = useFormik({
-    initialValues: { url: '' },
+    initialValues: { url: '', org: '' },
     validate: values => {
       const errors: { url?: string } = {};
 
@@ -70,9 +75,10 @@ export const Create = () => {
           isFullWidth
           type="text"
           id="url"
+          name="url"
+          value={values.url}
           aria-describedby="url-helper-text"
           placeholder="https://google.com/"
-          value={values.url}
           isDisabled={createLinkPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}
@@ -82,6 +88,31 @@ export const Create = () => {
         </FormHelperText>
         <FormErrorMessage>{errors.url}</FormErrorMessage>
       </FormControl>
+      <FormControl as="fieldset" isInvalid={touched.org && !!errors.org}>
+        <FormLabel htmlFor="url">Org</FormLabel>
+        <Select
+          id="org"
+          name="org"
+          value={values.org}
+          onBlur={handleBlur}
+          onChange={handleChange}
+        >
+          <option value="">None</option>
+          {organizationsPayload.data &&
+            organizationsPayload.data.organizations.map(organization => (
+              <option key={organization.id} value={organization.id}>
+                {organization.name}
+              </option>
+            ))}
+        </Select>
+        <FormHelperText id="email-helper-text">
+          Which org should we attach this link to? (Optional)
+        </FormHelperText>
+        <FormErrorMessage>{errors.url}</FormErrorMessage>
+      </FormControl>
+      {values.org !== '' ? (
+        <p>Soon you will be prompted for custom Slug.</p>
+      ) : null}
       <fieldset>
         <Button isLoading={createLinkPayload.fetching} type="submit">
           Create

@@ -10,6 +10,7 @@ import {
   Stack,
   Skeleton,
   Link,
+  Text,
   Icon,
   Tooltip,
 } from '@chakra-ui/core';
@@ -55,7 +56,7 @@ export const Links = () => {
         <TableHead>
           <TableRow>
             <TableHeader>Edge URL</TableHeader>
-            <TableHeader>Slug</TableHeader>
+            <TableHeader>Org</TableHeader>
             <TableHeader>URL</TableHeader>
           </TableRow>
         </TableHead>
@@ -67,12 +68,19 @@ export const Links = () => {
             >
               <TableCell>
                 <Link
-                  href={`https://edg.sh/${link.slug}`}
+                  href={`${
+                    link.organization
+                      ? link.organization.domain
+                      : 'https://edg.sh/'
+                  }${link.slug}`}
                   target="_blank"
                   rel="noopener"
                   color="orange.500"
                 >
-                  https://edg.sh/{link.slug}
+                  {link.organization
+                    ? link.organization.domain
+                    : 'https://edg.sh/'}
+                  {link.slug}
                 </Link>{' '}
                 <Tooltip label="Copy" aria-label="Copy">
                   <Link onClick={() => handleCopy(link.slug)}>
@@ -80,8 +88,21 @@ export const Links = () => {
                   </Link>
                 </Tooltip>
               </TableCell>
-              <TableCell>{link.slug}</TableCell>
-              <TableCell overflowWrap="break-word">{link.url}</TableCell>
+              <TableCell>
+                {link.organization ? link.organization.name : 'None'}
+              </TableCell>
+              <TableCell maxWidth={120} overflowWrap="break-word">
+                <Link
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener"
+                  color="orange.500"
+                >
+                  <Text fontSize="md" isTruncated>
+                    {link.url}
+                  </Text>
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

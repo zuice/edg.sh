@@ -6,7 +6,10 @@ export const Link = objectType({
     t.model.id();
     t.model.slug();
     t.model.url();
-    t.model.user();
     t.model.userId();
+    t.model.organizationId();
+    t.model.user();
+    t.model.organization();
+    t.model.createdAt();
   },
 });

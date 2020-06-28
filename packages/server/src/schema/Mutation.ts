@@ -118,16 +118,45 @@ export const Mutation = mutationType({
       type: 'Link',
       args: {
         url: stringArg({ nullable: false }),
+        org: stringArg({ nullable: true }),
       },
-      resolve: async (_parent, { url }, ctx) => {
+      resolve: async (_parent, { url, org }, ctx) => {
         const id = getUserId(ctx);
         const slug = generateSlug();
 
         const link = ctx.prisma.link.create({
-          data: { url, slug, user: { connect: { id } } },
+          data: {
+            url,
+            slug,
+            user: { connect: { id } },
+            organization: {
+              connect: { id: org && org !== '' ? org : undefined },
+            },
+          },
         });
 
         return link;
+      },
+    });
+
+    t.field('createOrganization', {
+      type: 'Organization',
+      args: {
+        name: stringArg({ nullable: false }),
+        domain: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { name, domain }, ctx) => {
+        const id = getUserId(ctx);
+        const organization = ctx.prisma.organization.create({
+          data: {
+            name,
+            domain,
+            owner: { connect: { id } },
+            members: { connect: { id } },
+          },
+        });
+
+        return organization;
       },
     });
   },

@@ -3,11 +3,53 @@ query Links {
     id
     slug
     url
+    organization {
+      id
+      name
+      domain
+    }
+    createdAt
     user {
       id
       name
       email
     }
+  }
+}
+
+query Organizations {
+  organizations {
+    id
+    name
+    domain
+    createdAt
+    owner {
+      id
+      name
+      email
+    }
+    members {
+      id
+      name
+      email
+    }
+    links {
+      id
+      slug
+      url
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+}
+
+query OrganizationsDropdown {
+  organizations {
+    id
+    name
   }
 }
 
@@ -42,13 +84,21 @@ mutation Logout {
   logout
 }
 
-mutation CreateLink($url: String!) {
-  createLink(url: $url) {
+mutation CreateLink($url: String!, $org: String) {
+  createLink(url: $url, org: $org) {
     id
     slug
     url
     user {
       id
     }
+  }
+}
+
+mutation CreateOrganization($name: String!, $domain: String!) {
+  createOrganization(name: $name, domain: $domain) {
+    id
+    name
+    domain
   }
 }

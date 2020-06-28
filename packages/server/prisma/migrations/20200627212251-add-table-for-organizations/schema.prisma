@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -18,21 +18,18 @@ model User {
   tokenVersion        Int            @default(1)
   stripeId            String?        @unique
   links               Link[]
-  organizationId      String?
   ownedOrganizations  Organization[] @relation("owner")
   partOfOrganizations Organization[] @relation(references: [id])
-  createdAt           DateTime       @default(now())
 }
 
 model Organization {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  domain    String   @unique
-  ownerId   String
-  owner     User     @relation(name: "owner", fields: [ownerId], references: [id])
-  members   User[]   @relation(references: [id])
-  links     Link[]
-  createdAt DateTime @default(now())
+  id      String @id @default(uuid())
+  name    String @unique
+  domain  String @unique
+  ownerId String
+  owner   User   @relation(name: "owner", fields: [ownerId], references: [id])
+  members User[] @relation(references: [id])
+  links   Link[]
 }
 
 model Link {
@@ -43,5 +40,4 @@ model Link {
   organizationId String?
   user           User          @relation(fields: [userId], references: [id])
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  createdAt      DateTime      @default(now())
 }

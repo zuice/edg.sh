@@ -25,5 +25,19 @@ export const Query = queryType({
         return links;
       },
     });
+
+    t.field('organizations', {
+      type: 'Organization',
+      list: true,
+      resolve: async (_parent, _args, ctx) => {
+        const id = getUserId(ctx);
+        const user = await ctx.prisma.user.findOne({
+          where: { id },
+          include: { partOfOrganizations: true },
+        });
+
+        return user!.partOfOrganizations;
+      },
+    });
   },
 });

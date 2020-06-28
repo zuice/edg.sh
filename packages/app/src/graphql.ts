@@ -10,6 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 export type AuthPayload = {
@@ -18,9 +19,13 @@ export type AuthPayload = {
   user: User;
 };
 
+
 export type Link = {
   __typename?: 'Link';
+  createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  organization?: Maybe<Organization>;
+  organizationId?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   url: Scalars['String'];
   user: User;
@@ -30,6 +35,7 @@ export type Link = {
 export type Mutation = {
   __typename?: 'Mutation';
   createLink: Link;
+  createOrganization: Organization;
   login: AuthPayload;
   logout: Scalars['Boolean'];
   refresh: AuthPayload;
@@ -38,7 +44,14 @@ export type Mutation = {
 
 
 export type MutationCreateLinkArgs = {
+  org?: Maybe<Scalars['String']>;
   url: Scalars['String'];
+};
+
+
+export type MutationCreateOrganizationArgs = {
+  domain: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
@@ -54,14 +67,38 @@ export type MutationRegisterArgs = {
   password: Scalars['String'];
 };
 
+export type Organization = {
+  __typename?: 'Organization';
+  createdAt: Scalars['DateTime'];
+  domain: Scalars['String'];
+  id: Scalars['String'];
+  links: Array<Link>;
+  members: Array<User>;
+  name: Scalars['String'];
+  owner: User;
+  ownerId: Scalars['String'];
+};
+
+
+export type OrganizationLinksArgs = {
+  skip?: Maybe<Scalars['Int']>;
+};
+
+
+export type OrganizationMembersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   links: Array<Link>;
   me?: Maybe<User>;
+  organizations: Array<Organization>;
 };
 
 export type User = {
   __typename?: 'User';
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['String'];
   links: Array<Link>;
@@ -83,11 +120,50 @@ export type LinksQuery = (
   { __typename?: 'Query' }
   & { links: Array<(
     { __typename?: 'Link' }
-    & Pick<Link, 'id' | 'slug' | 'url'>
-    & { user: (
+    & Pick<Link, 'id' | 'slug' | 'url' | 'createdAt'>
+    & { organization?: Maybe<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'id' | 'name' | 'domain'>
+    )>, user: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'name' | 'email'>
     ) }
+  )> }
+);
+
+export type OrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrganizationsQuery = (
+  { __typename?: 'Query' }
+  & { organizations: Array<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'id' | 'name' | 'domain' | 'createdAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name' | 'email'>
+    ), members: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name' | 'email'>
+    )>, links: Array<(
+      { __typename?: 'Link' }
+      & Pick<Link, 'id' | 'slug' | 'url'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'name' | 'email'>
+      ) }
+    )> }
+  )> }
+);
+
+export type OrganizationsDropdownQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrganizationsDropdownQuery = (
+  { __typename?: 'Query' }
+  & { organizations: Array<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'id' | 'name'>
   )> }
 );
 
@@ -153,6 +229,7 @@ export type LogoutMutation = (
 
 export type CreateLinkMutationVariables = Exact<{
   url: Scalars['String'];
+  org?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -168,6 +245,20 @@ export type CreateLinkMutation = (
   ) }
 );
 
+export type CreateOrganizationMutationVariables = Exact<{
+  name: Scalars['String'];
+  domain: Scalars['String'];
+}>;
+
+
+export type CreateOrganizationMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrganization: (
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'id' | 'name' | 'domain'>
+  ) }
+);
+
 
 export const LinksDocument = gql`
     query Links {
@@ -175,6 +266,12 @@ export const LinksDocument = gql`
     id
     slug
     url
+    organization {
+      id
+      name
+      domain
+    }
+    createdAt
     user {
       id
       name
@@ -186,6 +283,52 @@ export const LinksDocument = gql`
 
 export function useLinksQuery(options: Omit<Urql.UseQueryArgs<LinksQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<LinksQuery>({ query: LinksDocument, ...options });
+};
+export const OrganizationsDocument = gql`
+    query Organizations {
+  organizations {
+    id
+    name
+    domain
+    createdAt
+    owner {
+      id
+      name
+      email
+    }
+    members {
+      id
+      name
+      email
+    }
+    links {
+      id
+      slug
+      url
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+}
+    `;
+
+export function useOrganizationsQuery(options: Omit<Urql.UseQueryArgs<OrganizationsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<OrganizationsQuery>({ query: OrganizationsDocument, ...options });
+};
+export const OrganizationsDropdownDocument = gql`
+    query OrganizationsDropdown {
+  organizations {
+    id
+    name
+  }
+}
+    `;
+
+export function useOrganizationsDropdownQuery(options: Omit<Urql.UseQueryArgs<OrganizationsDropdownQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<OrganizationsDropdownQuery>({ query: OrganizationsDropdownDocument, ...options });
 };
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
@@ -239,8 +382,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const CreateLinkDocument = gql`
-    mutation CreateLink($url: String!) {
-  createLink(url: $url) {
+    mutation CreateLink($url: String!, $org: String) {
+  createLink(url: $url, org: $org) {
     id
     slug
     url
@@ -253,4 +396,17 @@ export const CreateLinkDocument = gql`
 
 export function useCreateLinkMutation() {
   return Urql.useMutation<CreateLinkMutation, CreateLinkMutationVariables>(CreateLinkDocument);
+};
+export const CreateOrganizationDocument = gql`
+    mutation CreateOrganization($name: String!, $domain: String!) {
+  createOrganization(name: $name, domain: $domain) {
+    id
+    name
+    domain
+  }
+}
+    `;
+
+export function useCreateOrganizationMutation() {
+  return Urql.useMutation<CreateOrganizationMutation, CreateOrganizationMutationVariables>(CreateOrganizationDocument);
 };

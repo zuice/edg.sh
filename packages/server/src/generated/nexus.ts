@@ -30,14 +30,24 @@ export interface NexusGenRootTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Link: { // root type
+    createdAt: any; // DateTime!
     id: string; // String!
+    organizationId?: string | null; // String
     slug: string; // String!
     url: string; // String!
     userId: string; // String!
   }
   Mutation: {};
+  Organization: { // root type
+    createdAt: any; // DateTime!
+    domain: string; // String!
+    id: string; // String!
+    name: string; // String!
+    ownerId: string; // String!
+  }
   Query: {};
   User: { // root type
+    createdAt: any; // DateTime!
     email: string; // String!
     id: string; // String!
     name: string; // String!
@@ -50,6 +60,7 @@ export interface NexusGenRootTypes {
   Float: number;
   Boolean: boolean;
   ID: string;
+  DateTime: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -61,7 +72,10 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Link: { // field return type
+    createdAt: any; // DateTime!
     id: string; // String!
+    organization: NexusGenRootTypes['Organization'] | null; // Organization
+    organizationId: string | null; // String
     slug: string; // String!
     url: string; // String!
     user: NexusGenRootTypes['User']; // User!
@@ -69,16 +83,29 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createLink: NexusGenRootTypes['Link']; // Link!
+    createOrganization: NexusGenRootTypes['Organization']; // Organization!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: boolean; // Boolean!
     refresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
+  Organization: { // field return type
+    createdAt: any; // DateTime!
+    domain: string; // String!
+    id: string; // String!
+    links: NexusGenRootTypes['Link'][]; // [Link!]!
+    members: NexusGenRootTypes['User'][]; // [User!]!
+    name: string; // String!
+    owner: NexusGenRootTypes['User']; // User!
+    ownerId: string; // String!
+  }
   Query: { // field return type
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     me: NexusGenRootTypes['User'] | null; // User
+    organizations: NexusGenRootTypes['Organization'][]; // [Organization!]!
   }
   User: { // field return type
+    createdAt: any; // DateTime!
     email: string; // String!
     id: string; // String!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
@@ -92,7 +119,12 @@ export interface NexusGenFieldTypes {
 export interface NexusGenArgTypes {
   Mutation: {
     createLink: { // args
+      org?: string | null; // String
       url: string; // String!
+    }
+    createOrganization: { // args
+      domain: string; // String!
+      name: string; // String!
     }
     login: { // args
       email: string; // String!
@@ -102,6 +134,14 @@ export interface NexusGenArgTypes {
       email: string; // String!
       name: string; // String!
       password: string; // String!
+    }
+  }
+  Organization: {
+    links: { // args
+      skip?: number | null; // Int
+    }
+    members: { // args
+      skip?: number | null; // Int
     }
   }
   User: {
@@ -116,7 +156,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Query" | "User";
+export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Organization" | "Query" | "User";
 
 export type NexusGenInputNames = never;
 
@@ -124,7 +164,7 @@ export type NexusGenEnumNames = never;
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String";
+export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "String";
 
 export type NexusGenUnionNames = never;
 

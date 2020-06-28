@@ -60,13 +60,25 @@ app.express.post('/refresh', async (req: Request, res: Response) => {
 });
 app.get('/:slug', async (req: Request, res: Response) => {
   const { slug } = req.params as { slug: string };
-  const link = await prisma.link.findOne({ where: { slug } });
+  const link = await prisma.link.findOne({
+    where: { slug },
+    include: { organization: true },
+  });
+  const host = req.get('host') as string;
 
   if (link) {
-    return res.redirect(link.url, 301);
+    if (link.organization) {
+      if (host.indexOf(link.organization.domain) >= 0) {
+        return res.redirect(301, link.url);
+      }
+
+      return res.sendStatus(404);
+    }
+
+    return res.redirect(301, link.url);
   }
 
-  return res.send(404);
+  return res.sendStatus(404);
 });
 app.start(
   {

@@ -7,8 +7,13 @@ type AuthPayload {
   user: User!
 }
 
+scalar DateTime
+
 type Link {
+  createdAt: DateTime!
   id: String!
+  organization: Organization
+  organizationId: String
   slug: String!
   url: String!
   user: User!
@@ -16,19 +21,33 @@ type Link {
 }
 
 type Mutation {
-  createLink(url: String!): Link!
+  createLink(org: String, url: String!): Link!
+  createOrganization(domain: String!, name: String!): Organization!
   login(email: String!, password: String!): AuthPayload!
   logout: Boolean!
   refresh: AuthPayload!
   register(email: String!, name: String!, password: String!): AuthPayload!
 }
 
+type Organization {
+  createdAt: DateTime!
+  domain: String!
+  id: String!
+  links(skip: Int): [Link!]!
+  members(skip: Int): [User!]!
+  name: String!
+  owner: User!
+  ownerId: String!
+}
+
 type Query {
   links: [Link!]!
   me: User
+  organizations: [Organization!]!
 }
 
 type User {
+  createdAt: DateTime!
   email: String!
   id: String!
   links(skip: Int): [Link!]!

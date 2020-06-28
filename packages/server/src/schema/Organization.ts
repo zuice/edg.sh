@@ -1,14 +1,14 @@
 import { objectType } from '@nexus/schema';
 
-export const User = objectType({
-  name: 'User',
+export const Organization = objectType({
+  name: 'Organization',
   definition(t) {
     t.model.id();
     t.model.name();
-    t.model.email();
-    t.model.password();
-    t.model.tokenVersion();
-    t.model.stripeId();
+    t.model.domain();
+    t.model.ownerId();
+    t.model.owner();
+    t.model.members();
     t.model.links();
     t.model.createdAt();
   },
