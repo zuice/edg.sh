@@ -7,6 +7,7 @@ import { RedisClient } from 'redis';
 import { prisma } from './lib/prisma';
 import { stripe } from './lib/stripe';
 import { redis } from './lib/redis';
+import { Dokku } from './lib/Dokku';
 
 export interface Context {
   prisma: PrismaClient;
@@ -14,6 +15,7 @@ export interface Context {
   request: Request;
   response: Response;
   redis: RedisClient;
+  dokku: Dokku;
 }
 
 export const createContext = (ctx: ContextParameters): Context => ({
@@ -21,4 +23,5 @@ export const createContext = (ctx: ContextParameters): Context => ({
   prisma,
   stripe,
   redis,
+  dokku: new Dokku(),
 });

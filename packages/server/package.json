@@ -16,6 +16,7 @@
     "@nexus/schema": "0.13.1",
     "@prisma/client": "^2.0.0-beta.8",
     "@prisma/migrate": "^2.1.0",
+    "axios": "^0.19.2",
     "bcryptjs": "2.4.3",
     "bluebird": "^3.7.2",
     "cookie-parser": "^1.4.5",
