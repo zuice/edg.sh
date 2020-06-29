@@ -6,7 +6,6 @@ import { verify, decode } from 'jsonwebtoken';
 import { IToken } from '../types/IToken';
 import { getUserId } from '../utils/getUserId';
 import { generateSlug } from '../utils/generateSlug';
-import { Dokku } from '../lib/Dokku';
 
 export const Mutation = mutationType({
   definition(t) {
