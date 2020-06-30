@@ -86,7 +86,7 @@ export const Create = () => {
           name="name"
           value={values.name}
           aria-describedby="url-helper-text"
-          placeholder="https://google.com/"
+          placeholder="My Org"
           isDisabled={createOrganizationPayload.fetching}
           onBlur={handleBlur}
           onChange={handleChange}

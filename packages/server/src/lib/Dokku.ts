@@ -5,37 +5,47 @@ interface IResponse {
 }
 
 export class Dokku {
-  apiKey = process.env.DOKKU_API_KEY;
-  apiSecret = process.env.DOKKU_API_SECRET;
-  env = process.env.NODE_ENV;
   axios = axios.create({
-    baseURL: 'http://134.122.123.191/',
-    headers: { 'Content-Type': 'application/vnd.api+json' },
+    baseURL: 'https://dokku.edg.sh',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Api-Key': process.env.DOKKU_API_KEY,
+      'Api-Secret': process.env.DOKKU_API_SECRET,
+    },
   });
 
-  async addDomain(domain: string): Promise<boolean> {
-    const addGlobalDomainResponse = await this.axios.post<IResponse>(
-      '/commands',
-      { cmd: `domains:add-global ${domain}` },
-    );
+  async addDomain(domainWithProtocol: string): Promise<boolean> {
+    const domain = domainWithProtocol
+      .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+      .split('/')[0];
 
-    if (addGlobalDomainResponse.data.result_data.ok) {
-      const addDomainResponse = await this.axios.post<IResponse>('/commands', {
-        cmd: `domains:add edgsh ${domain}`,
-      });
+    try {
+      const addGlobalDomainResponse = await this.axios.post<IResponse>(
+        'commands',
+        `sync=true&cmd=domains:add-global ${domain}`,
+      );
 
-      if (addDomainResponse.data.result_data.ok) {
-        const letsencryptResponse = await this.axios.post<IResponse>(
+      if (addGlobalDomainResponse.data.result_data.ok) {
+        const addDomainResponse = await this.axios.post<IResponse>(
           '/commands',
-          { cmd: 'letsencrypt edgsh' },
+          `sync=true&cmd=domains:add edgsh ${domain}`,
         );
 
-        return letsencryptResponse.data.result_data.ok;
+        if (addDomainResponse.data.result_data.ok) {
+          const letsencryptResponse = await this.axios.post<IResponse>(
+            '/commands',
+            `sync=true&cmd=letsencrypt edgsh`,
+          );
+
+          return letsencryptResponse.data.result_data.ok;
+        }
+
+        return false;
       }
 
       return false;
+    } catch (e) {
+      return false;
     }
-
-    return false;
   }
 }

@@ -12,6 +12,7 @@ import { prisma } from './lib/prisma';
 import { IToken } from './types/IToken';
 import { sendRefreshToken } from './utils/sendRefreshToken';
 import { createRefreshToken, createAccessToken } from './auth';
+import { Dokku } from './lib/Dokku';
 
 config();
 
