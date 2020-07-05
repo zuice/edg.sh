@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { DashboardHeader } from '../../../components/DashboardHeader';
 import { Orgs as OrgsPage } from './Orgs';
@@ -12,6 +13,9 @@ export const Orgs = () => {
 
   return (
     <>
+      <Helmet>
+        <title>My Orgs - Edg.sh</title>
+      </Helmet>
       <DashboardHeader title="Organizations">
         <ButtonLink to="/orgs/create" leftIcon="add">
           Create

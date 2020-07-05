@@ -38,10 +38,14 @@ export const AuthContextProvider: FC = ({ children }) => {
 
   useEffect(() => {
     const getRefreshToken = async () => {
-      const token = await fetchRefreshToken();
+      try {
+        const token = await fetchRefreshToken();
 
-      setAccessToken(token !== '' ? token : '');
-      setIsLoading(false);
+        setAccessToken(token !== '' ? token : '');
+        setIsLoading(false);
+      } catch (_) {
+        setIsLoading(false);
+      }
     };
 
     getRefreshToken();

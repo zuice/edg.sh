@@ -36,6 +36,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createLink: Link;
   createOrganization: Organization;
+  destroyOrganization: Organization;
   login: AuthPayload;
   logout: Scalars['Boolean'];
   refresh: AuthPayload;
@@ -52,6 +53,11 @@ export type MutationCreateLinkArgs = {
 export type MutationCreateOrganizationArgs = {
   domain: Scalars['String'];
   name: Scalars['String'];
+};
+
+
+export type MutationDestroyOrganizationArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -259,6 +265,19 @@ export type CreateOrganizationMutation = (
   ) }
 );
 
+export type DestroyOrganizationMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DestroyOrganizationMutation = (
+  { __typename?: 'Mutation' }
+  & { destroyOrganization: (
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'id' | 'name' | 'domain'>
+  ) }
+);
+
 
 export const LinksDocument = gql`
     query Links {
@@ -409,4 +428,17 @@ export const CreateOrganizationDocument = gql`
 
 export function useCreateOrganizationMutation() {
   return Urql.useMutation<CreateOrganizationMutation, CreateOrganizationMutationVariables>(CreateOrganizationDocument);
+};
+export const DestroyOrganizationDocument = gql`
+    mutation DestroyOrganization($id: String!) {
+  destroyOrganization(id: $id) {
+    id
+    name
+    domain
+  }
+}
+    `;
+
+export function useDestroyOrganizationMutation() {
+  return Urql.useMutation<DestroyOrganizationMutation, DestroyOrganizationMutationVariables>(DestroyOrganizationDocument);
 };

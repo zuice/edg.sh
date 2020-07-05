@@ -26,6 +26,7 @@
     "graphql-tag": "^2.10.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/react-helmet": "^6.0.0",
     "@types/react-router-dom": "^5.1.5",
     "netlify-cli": "^2.52.0"
   }

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { useFormik } from 'formik';
 import {
   useToast,
@@ -76,50 +77,62 @@ export const Create = () => {
   }, [createOrganizationPayload, setErrors, toast, history]);
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off" style={{ width: '100%' }}>
-      <FormControl as="fieldset" isInvalid={touched.name && !!errors.name}>
-        <FormLabel htmlFor="name">Name</FormLabel>
-        <Input
-          isFullWidth
-          type="text"
-          id="name"
-          name="name"
-          value={values.name}
-          aria-describedby="url-helper-text"
-          placeholder="My Org"
-          isDisabled={createOrganizationPayload.fetching}
-          onBlur={handleBlur}
-          onChange={handleChange}
-        />
-        <FormHelperText id="email-helper-text">
-          What should your new Organization be called?
-        </FormHelperText>
-        <FormErrorMessage>{errors.name}</FormErrorMessage>
-      </FormControl>
-      <FormControl as="fieldset" isInvalid={touched.domain && !!errors.domain}>
-        <FormLabel htmlFor="url">Domain</FormLabel>
-        <Input
-          isFullWidth
-          type="text"
-          id="domain"
-          name="domain"
-          value={values.domain}
-          aria-describedby="url-helper-text"
-          placeholder="https://google.com/"
-          isDisabled={createOrganizationPayload.fetching}
-          onBlur={handleBlur}
-          onChange={handleChange}
-        />
-        <FormHelperText id="email-helper-text">
-          What domain would you like to redirect?
-        </FormHelperText>
-        <FormErrorMessage>{errors.domain}</FormErrorMessage>
-      </FormControl>
-      <fieldset>
-        <Button isLoading={createOrganizationPayload.fetching} type="submit">
-          Create
-        </Button>
-      </fieldset>
-    </form>
+    <>
+      <Helmet>
+        <title>Create Org - Edg.sh</title>
+      </Helmet>
+      <form
+        onSubmit={handleSubmit}
+        autoComplete="off"
+        style={{ width: '100%' }}
+      >
+        <FormControl as="fieldset" isInvalid={touched.name && !!errors.name}>
+          <FormLabel htmlFor="name">Name</FormLabel>
+          <Input
+            isFullWidth
+            type="text"
+            id="name"
+            name="name"
+            value={values.name}
+            aria-describedby="url-helper-text"
+            placeholder="My Org"
+            isDisabled={createOrganizationPayload.fetching}
+            onBlur={handleBlur}
+            onChange={handleChange}
+          />
+          <FormHelperText id="email-helper-text">
+            What should your new Organization be called?
+          </FormHelperText>
+          <FormErrorMessage>{errors.name}</FormErrorMessage>
+        </FormControl>
+        <FormControl
+          as="fieldset"
+          isInvalid={touched.domain && !!errors.domain}
+        >
+          <FormLabel htmlFor="url">Domain</FormLabel>
+          <Input
+            isFullWidth
+            type="text"
+            id="domain"
+            name="domain"
+            value={values.domain}
+            aria-describedby="url-helper-text"
+            placeholder="https://google.com/"
+            isDisabled={createOrganizationPayload.fetching}
+            onBlur={handleBlur}
+            onChange={handleChange}
+          />
+          <FormHelperText id="email-helper-text">
+            What domain would you like to redirect?
+          </FormHelperText>
+          <FormErrorMessage>{errors.domain}</FormErrorMessage>
+        </FormControl>
+        <fieldset>
+          <Button isLoading={createOrganizationPayload.fetching} type="submit">
+            Create
+          </Button>
+        </fieldset>
+      </form>
+    </>
   );
 };

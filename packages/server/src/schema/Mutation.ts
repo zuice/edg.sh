@@ -156,24 +156,36 @@ export const Mutation = mutationType({
           },
         });
 
-        // this is where we want to add domain to dokku and fire letsencrypt on it.
-        if (process.env.NODE_ENV === 'production') {
-          const ok = await ctx.dokku.addDomain(domain);
+        // // this is where we want to add domain to dokku and fire letsencrypt on it.
+        // if (process.env.NODE_ENV === 'production') {
+        //   const ok = await ctx.dokku.addDomain(domain);
 
-          if (ok) {
-            return organization;
-          }
+        //   if (ok) {
+        //     return organization;
+        //   }
 
-          await ctx.prisma.organization.delete({
-            where: { id: organization.id },
-          });
+        //   await ctx.prisma.organization.delete({
+        //     where: { id: organization.id },
+        //   });
 
-          throw new Error(
-            'We hit an issue securing your domain. Please try again later.',
-          );
-        }
+        //   throw new Error(
+        //     'We hit an issue securing your domain. Please try again later.',
+        //   );
+        // }
 
         return organization;
+      },
+    });
+
+    t.field('destroyOrganization', {
+      type: 'Organization',
+      args: {
+        id: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { id }, ctx) => {
+        const deleted = ctx.prisma.organization.delete({ where: { id } });
+
+        return deleted;
       },
     });
   },

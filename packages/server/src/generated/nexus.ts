@@ -84,6 +84,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createLink: NexusGenRootTypes['Link']; // Link!
     createOrganization: NexusGenRootTypes['Organization']; // Organization!
+    destroyOrganization: NexusGenRootTypes['Organization']; // Organization!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: boolean; // Boolean!
     refresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -125,6 +126,9 @@ export interface NexusGenArgTypes {
     createOrganization: { // args
       domain: string; // String!
       name: string; // String!
+    }
+    destroyOrganization: { // args
+      id: string; // String!
     }
     login: { // args
       email: string; // String!

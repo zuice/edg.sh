@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   AlertIcon,
@@ -7,9 +7,16 @@ import {
   CloseButton,
   Stack,
   Skeleton,
+  Button,
+  Icon,
 } from '@chakra-ui/core';
 
-import { useOrganizationsQuery } from '../../../graphql';
+import {
+  useOrganizationsQuery,
+  useDestroyOrganizationMutation,
+  Organization,
+  User,
+} from '../../../graphql';
 import {
   Table,
   TableHeader,
@@ -19,8 +26,35 @@ import {
   TableCell,
 } from '../../../components/Table';
 
+type Organizations = Array<
+  Pick<Organization, 'id' | 'name' | 'domain' | 'createdAt'> & {
+    owner: Pick<User, 'id' | 'name' | 'email'>;
+  }
+>;
+
 export const Orgs = () => {
+  const [organizations, setOrganizations] = useState<Organizations>([]);
   const [organizationsPayload] = useOrganizationsQuery();
+  const [
+    destroyOrganizationPayload,
+    getDestroyOrganizationPayload,
+  ] = useDestroyOrganizationMutation();
+
+  const handleDestroyClick = async (id: string) => {
+    await getDestroyOrganizationPayload({ id });
+
+    const newOrganizations = organizations.filter(
+      organization => organization.id !== id,
+    );
+
+    setOrganizations(newOrganizations);
+  };
+
+  useEffect(() => {
+    if (organizationsPayload.data) {
+      setOrganizations(organizationsPayload.data.organizations);
+    }
+  }, [organizationsPayload.data]);
 
   if (organizationsPayload.data) {
     return (
@@ -30,21 +64,31 @@ export const Orgs = () => {
             <TableHeader>Name</TableHeader>
             <TableHeader>Domain</TableHeader>
             <TableHeader>Owner</TableHeader>
+            <TableHeader>Destroy</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {organizationsPayload.data.organizations.map(
-            (organization, index) => (
-              <TableRow
-                key={organization.id}
-                backgroundColor={index % 2 ? 'gray.700' : 'gray.600'}
-              >
-                <TableCell>{organization.name}</TableCell>
-                <TableCell>{organization.domain}</TableCell>
-                <TableCell>{organization.owner.name}</TableCell>
-              </TableRow>
-            ),
-          )}
+          {organizations.map((organization, index) => (
+            <TableRow
+              key={organization.id}
+              backgroundColor={index % 2 ? 'gray.700' : 'gray.600'}
+            >
+              <TableCell>{organization.name}</TableCell>
+              <TableCell>{organization.domain}</TableCell>
+              <TableCell>{organization.owner.name}</TableCell>
+              <TableCell width="50px">
+                <Button
+                  variantColor="red"
+                  isLoading={destroyOrganizationPayload.fetching}
+                  onClick={async () =>
+                    await handleDestroyClick(organization.id)
+                  }
+                >
+                  <Icon name="delete" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     );

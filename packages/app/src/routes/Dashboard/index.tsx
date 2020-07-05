@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
 import { Navbar } from '../../components/Navbar';
@@ -9,6 +10,9 @@ import { Error404 } from '../Error404';
 
 export const Dashboard = () => (
   <>
+    <Helmet>
+      <title>Dashboard - Edg.sh</title>
+    </Helmet>
     <Navbar />
     <Container>
       <Switch>

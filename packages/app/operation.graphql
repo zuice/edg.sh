@@ -102,3 +102,11 @@ mutation CreateOrganization($name: String!, $domain: String!) {
     domain
   }
 }
+
+mutation DestroyOrganization($id: String!) {
+  destroyOrganization(id: $id) {
+    id
+    name
+    domain
+  }
+}

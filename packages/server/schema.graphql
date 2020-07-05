@@ -23,6 +23,7 @@ type Link {
 type Mutation {
   createLink(org: String, url: String!): Link!
   createOrganization(domain: String!, name: String!): Organization!
+  destroyOrganization(id: String!): Organization!
   login(email: String!, password: String!): AuthPayload!
   logout: Boolean!
   refresh: AuthPayload!
