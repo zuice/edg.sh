@@ -80,6 +80,16 @@ app.get('/:slug', async (req: Request, res: Response) => {
 
   return res.sendStatus(404);
 });
+app.get('/:domain', async (req: Request, res: Response) => {
+  const { domain } = req.params as { domain: string };
+  const organization = await prisma.organization.findOne({ where: { domain } });
+
+  if (organization) {
+    return res.sendStatus(200);
+  }
+
+  return res.sendStatus(404);
+});
 app.start(
   {
     port,

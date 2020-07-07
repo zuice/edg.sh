@@ -6,6 +6,7 @@ import { verify, decode } from 'jsonwebtoken';
 import { IToken } from '../types/IToken';
 import { getUserId } from '../utils/getUserId';
 import { generateSlug } from '../utils/generateSlug';
+import { getDomainWithoutProtocol } from '../utils/getDomainWithoutProtocol';
 
 export const Mutation = mutationType({
   definition(t) {
@@ -147,31 +148,15 @@ export const Mutation = mutationType({
       },
       resolve: async (_parent, { name, domain }, ctx) => {
         const id = getUserId(ctx);
+        const domainWithoutProtocol = getDomainWithoutProtocol(domain);
         const organization = await ctx.prisma.organization.create({
           data: {
             name,
-            domain,
+            domain: domainWithoutProtocol,
             owner: { connect: { id } },
             members: { connect: { id } },
           },
         });
-
-        // // this is where we want to add domain to dokku and fire letsencrypt on it.
-        // if (process.env.NODE_ENV === 'production') {
-        //   const ok = await ctx.dokku.addDomain(domain);
-
-        //   if (ok) {
-        //     return organization;
-        //   }
-
-        //   await ctx.prisma.organization.delete({
-        //     where: { id: organization.id },
-        //   });
-
-        //   throw new Error(
-        //     'We hit an issue securing your domain. Please try again later.',
-        //   );
-        // }
 
         return organization;
       },
