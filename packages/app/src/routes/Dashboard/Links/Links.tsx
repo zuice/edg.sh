@@ -24,6 +24,7 @@ import {
   TableBody,
   TableCell,
 } from '../../../components/Table';
+import { getLinkOrg } from '../../../utils/getLinkOrg';
 
 export const Links = () => {
   const [linksPayload] = useLinksQuery();
@@ -31,10 +32,9 @@ export const Links = () => {
   const { onCopy, hasCopied } = useClipboard<string>(value);
   const toast = useToast();
 
-  const handleCopy = (slug: string) => {
-    const url = `https://edg.sh/${slug}`;
+  const handleCopy = (link: string) => {
+    setValue(link);
 
-    setValue(url);
     onCopy && onCopy();
   };
 
@@ -68,22 +68,15 @@ export const Links = () => {
             >
               <TableCell>
                 <Link
-                  href={`${
-                    link.organization
-                      ? link.organization.domain
-                      : 'https://edg.sh/'
-                  }${link.slug}`}
+                  href={getLinkOrg(link)}
                   target="_blank"
                   rel="noopener"
                   color="orange.500"
                 >
-                  {link.organization
-                    ? link.organization.domain
-                    : 'https://edg.sh/'}
-                  {link.slug}
+                  {getLinkOrg(link)}
                 </Link>{' '}
                 <Tooltip label="Copy" aria-label="Copy">
-                  <Link onClick={() => handleCopy(link.slug)}>
+                  <Link onClick={() => handleCopy(getLinkOrg(link))}>
                     <Icon name="copy" />
                   </Link>
                 </Tooltip>
