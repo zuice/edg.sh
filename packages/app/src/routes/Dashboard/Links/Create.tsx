@@ -141,8 +141,8 @@ export const Create = () => {
               onChange={handleChange}
             />
             <FormHelperText id="slug-helper-text">
-              Link path (e.g. https://yourdomain.com/) (Optional)
-              <strong>cool-blog-post</strong>)
+              Link path (e.g. https://yourdomain.com/
+              <strong>cool-blog-post</strong>) (Optional)
             </FormHelperText>
             <FormErrorMessage>{errors.slug}</FormErrorMessage>
           </FormControl>
