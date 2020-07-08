@@ -22,6 +22,7 @@ const app = new GraphQLServer({
   middlewares: [permissions],
 });
 
+app.express.set('trust proxy', 1);
 app.express.use(
   cors({
     origin:
