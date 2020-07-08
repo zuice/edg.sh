@@ -36,6 +36,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createLink: Link;
   createOrganization: Organization;
+  destroyLink: Link;
   destroyOrganization: Organization;
   login: AuthPayload;
   logout: Scalars['Boolean'];
@@ -46,6 +47,7 @@ export type Mutation = {
 
 export type MutationCreateLinkArgs = {
   org?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   url: Scalars['String'];
 };
 
@@ -53,6 +55,11 @@ export type MutationCreateLinkArgs = {
 export type MutationCreateOrganizationArgs = {
   domain: Scalars['String'];
   name: Scalars['String'];
+};
+
+
+export type MutationDestroyLinkArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -236,6 +243,7 @@ export type LogoutMutation = (
 export type CreateLinkMutationVariables = Exact<{
   url: Scalars['String'];
   org?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -265,6 +273,19 @@ export type CreateOrganizationMutation = (
   ) }
 );
 
+export type DestroyLinkMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DestroyLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { destroyLink: (
+    { __typename?: 'Link' }
+    & Pick<Link, 'id'>
+  ) }
+);
+
 export type DestroyOrganizationMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -274,7 +295,7 @@ export type DestroyOrganizationMutation = (
   { __typename?: 'Mutation' }
   & { destroyOrganization: (
     { __typename?: 'Organization' }
-    & Pick<Organization, 'id' | 'name' | 'domain'>
+    & Pick<Organization, 'id'>
   ) }
 );
 
@@ -401,8 +422,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const CreateLinkDocument = gql`
-    mutation CreateLink($url: String!, $org: String) {
-  createLink(url: $url, org: $org) {
+    mutation CreateLink($url: String!, $org: String, $slug: String) {
+  createLink(url: $url, org: $org, slug: $slug) {
     id
     slug
     url
@@ -429,12 +450,21 @@ export const CreateOrganizationDocument = gql`
 export function useCreateOrganizationMutation() {
   return Urql.useMutation<CreateOrganizationMutation, CreateOrganizationMutationVariables>(CreateOrganizationDocument);
 };
+export const DestroyLinkDocument = gql`
+    mutation DestroyLink($id: String!) {
+  destroyLink(id: $id) {
+    id
+  }
+}
+    `;
+
+export function useDestroyLinkMutation() {
+  return Urql.useMutation<DestroyLinkMutation, DestroyLinkMutationVariables>(DestroyLinkDocument);
+};
 export const DestroyOrganizationDocument = gql`
     mutation DestroyOrganization($id: String!) {
   destroyOrganization(id: $id) {
     id
-    name
-    domain
   }
 }
     `;

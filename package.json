@@ -13,7 +13,8 @@
     "start:server": "lerna run start --scope @edg.sh/server",
     "prettier": "prettier --write \"**/*.{js,ts,tsx}\" \"!**/build/**\" --config .prettierrc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate:schema": "graphql-codegen --config codegen.yml"
+    "generate:schema": "graphql-codegen --config codegen.yml",
+    "generate": "lerna run generate:prisma --scope @edg.sh/server && lerna run generate:nexus --scope @edg.sh/server && npm run generate:schema"
   },
   "repository": {
     "type": "git",

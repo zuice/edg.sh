@@ -32,9 +32,9 @@ export const Create = () => {
     handleBlur,
     handleChange,
   } = useFormik({
-    initialValues: { url: '', org: '' },
+    initialValues: { url: '', org: '', slug: '' },
     validate: values => {
-      const errors: { url?: string } = {};
+      const errors: { url?: string; slug?: string } = {};
 
       if (
         !/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)/.test(
@@ -42,6 +42,14 @@ export const Create = () => {
         )
       ) {
         errors.url = 'Please enter a valid URL e.g. "https://google.com/".';
+      }
+
+      if (values.slug.length > 20) {
+        errors.slug = 'Keep it under 20 characters.';
+      }
+
+      if (values.slug.indexOf(' ') > -1) {
+        errors.slug = 'Cannot contain spaces.';
       }
 
       return errors;
@@ -99,6 +107,7 @@ export const Create = () => {
             id="org"
             name="org"
             value={values.org}
+            aria-describedby="org-helper-text"
             onBlur={handleBlur}
             onChange={handleChange}
           >
@@ -110,13 +119,33 @@ export const Create = () => {
                 </option>
               ))}
           </Select>
-          <FormHelperText id="email-helper-text">
+          <FormHelperText id="org-helper-text">
             Which org should we attach this link to? (Optional)
           </FormHelperText>
-          <FormErrorMessage>{errors.url}</FormErrorMessage>
+          <FormErrorMessage>{errors.org}</FormErrorMessage>
         </FormControl>
         {values.org !== '' ? (
-          <p>Soon you will be prompted for custom Slug.</p>
+          <FormControl as="fieldset" isInvalid={touched.slug && !!errors.slug}>
+            <FormLabel htmlFor="slug">Slug</FormLabel>
+            <Input
+              isFullWidth
+              type="text"
+              id="slug"
+              name="slug"
+              value={values.slug}
+              maxLength={20}
+              aria-describedby="slug-helper-text"
+              placeholder="cool-blog-post"
+              isDisabled={createLinkPayload.fetching}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+            <FormHelperText id="slug-helper-text">
+              Link path (e.g. https://yourdomain.com/) (Optional)
+              <strong>cool-blog-post</strong>)
+            </FormHelperText>
+            <FormErrorMessage>{errors.slug}</FormErrorMessage>
+          </FormControl>
         ) : null}
         <fieldset>
           <Button isLoading={createLinkPayload.fetching} type="submit">

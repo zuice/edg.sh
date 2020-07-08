@@ -120,19 +120,23 @@ export const Mutation = mutationType({
       args: {
         url: stringArg({ nullable: false }),
         org: stringArg({ nullable: true }),
+        slug: stringArg({ nullable: true }),
       },
-      resolve: async (_parent, { url, org }, ctx) => {
+      resolve: async (_parent, { url, slug, org }, ctx) => {
         const id = getUserId(ctx);
-        const slug = generateSlug();
+        const newSlug = slug && slug !== '' ? slug : generateSlug();
 
-        const link = ctx.prisma.link.create({
+        const link = await ctx.prisma.link.create({
           data: {
             url,
-            slug,
+            slug: newSlug,
             user: { connect: { id } },
-            organization: {
-              connect: { id: org && org !== '' ? org : undefined },
-            },
+            organization:
+              org && org !== ''
+                ? {
+                    connect: { id: org },
+                  }
+                : undefined,
           },
         });
 
@@ -162,15 +166,53 @@ export const Mutation = mutationType({
       },
     });
 
+    t.field('destroyLink', {
+      type: 'Link',
+      args: {
+        id: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { id }, ctx) => {
+        const link = await ctx.prisma.link.findOne({ where: { id } });
+        const userId = getUserId(ctx);
+
+        if (!link) {
+          throw new Error('Link does not exist.');
+        }
+
+        if (link.userId === userId) {
+          const deleted = await ctx.prisma.link.delete({ where: { id } });
+
+          return deleted;
+        }
+
+        throw new Error('You have no permission for this action.');
+      },
+    });
+
     t.field('destroyOrganization', {
       type: 'Organization',
       args: {
         id: stringArg({ nullable: false }),
       },
       resolve: async (_parent, { id }, ctx) => {
-        const deleted = ctx.prisma.organization.delete({ where: { id } });
+        const organization = await ctx.prisma.organization.findOne({
+          where: { id },
+        });
+        const userId = getUserId(ctx);
 
-        return deleted;
+        if (!organization) {
+          throw new Error('Organization does not exist.');
+        }
+
+        if (organization.ownerId === userId) {
+          const deleted = await ctx.prisma.organization.delete({
+            where: { id },
+          });
+
+          return deleted;
+        }
+
+        throw new Error('You have no permission for this action.');
       },
     });
   },

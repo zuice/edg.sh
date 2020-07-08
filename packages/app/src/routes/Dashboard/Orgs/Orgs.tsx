@@ -26,14 +26,16 @@ import {
   TableCell,
 } from '../../../components/Table';
 
-type Organizations = Array<
+type OrganizationsWithOwner = Array<
   Pick<Organization, 'id' | 'name' | 'domain' | 'createdAt'> & {
     owner: Pick<User, 'id' | 'name' | 'email'>;
   }
 >;
 
 export const Orgs = () => {
-  const [organizations, setOrganizations] = useState<Organizations>([]);
+  const [organizations, setOrganizations] = useState<OrganizationsWithOwner>(
+    [],
+  );
   const [organizationsPayload] = useOrganizationsQuery();
   const [
     destroyOrganizationPayload,

@@ -7,9 +7,9 @@ export const Query = queryType({
     t.field('me', {
       type: 'User',
       nullable: true,
-      resolve: (_parent, _args, ctx) => {
+      resolve: async (_parent, _args, ctx) => {
         const id = getUserId(ctx);
-        const user = ctx.prisma.user.findOne({ where: { id } });
+        const user = await ctx.prisma.user.findOne({ where: { id } });
 
         return user;
       },
@@ -20,7 +20,10 @@ export const Query = queryType({
       list: true,
       resolve: async (_parent, _args, ctx) => {
         const userId = getUserId(ctx);
-        const links = await ctx.prisma.link.findMany({ where: { userId } });
+        const links = await ctx.prisma.link.findMany({
+          where: { userId },
+          include: { organization: true },
+        });
 
         return links;
       },

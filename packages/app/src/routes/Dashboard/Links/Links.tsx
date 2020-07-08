@@ -13,9 +13,17 @@ import {
   Text,
   Icon,
   Tooltip,
+  Button,
 } from '@chakra-ui/core';
 
-import { useLinksQuery } from '../../../graphql';
+import {
+  Link as GraphQLLink,
+  Organization,
+  User,
+  Maybe,
+  useLinksQuery,
+  useDestroyLinkMutation,
+} from '../../../graphql';
 import {
   Table,
   TableHeader,
@@ -26,8 +34,17 @@ import {
 } from '../../../components/Table';
 import { getLinkOrg } from '../../../utils/getLinkOrg';
 
+type LinksWithOrganizationUser = Array<
+  Pick<GraphQLLink, 'id' | 'slug' | 'url' | 'createdAt'> & {
+    organization?: Maybe<Pick<Organization, 'id' | 'name' | 'domain'>>;
+    user: Pick<User, 'id' | 'name' | 'email'>;
+  }
+>;
+
 export const Links = () => {
+  const [links, setLinks] = useState<LinksWithOrganizationUser>([]);
   const [linksPayload] = useLinksQuery();
+  const [destroyLinkPayload, getDestroyLinkPayload] = useDestroyLinkMutation();
   const [value, setValue] = useState('');
   const { onCopy, hasCopied } = useClipboard<string>(value);
   const toast = useToast();
@@ -36,6 +53,14 @@ export const Links = () => {
     setValue(link);
 
     onCopy && onCopy();
+  };
+
+  const handleDestroyClick = async (id: string) => {
+    await getDestroyLinkPayload({ id });
+
+    const newOrganizations = links.filter(link => link.id !== id);
+
+    setLinks(newOrganizations);
   };
 
   useEffect(() => {
@@ -50,6 +75,12 @@ export const Links = () => {
     }
   }, [hasCopied, toast, value]);
 
+  useEffect(() => {
+    if (linksPayload.data) {
+      setLinks(linksPayload.data.links);
+    }
+  }, [linksPayload.data]);
+
   if (linksPayload.data) {
     return (
       <Table width="100%">
@@ -58,6 +89,7 @@ export const Links = () => {
             <TableHeader>Edge URL</TableHeader>
             <TableHeader>Org</TableHeader>
             <TableHeader>URL</TableHeader>
+            <TableHeader>Destroy</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -95,6 +127,15 @@ export const Links = () => {
                     {link.url}
                   </Text>
                 </Link>
+              </TableCell>
+              <TableCell width="50px">
+                <Button
+                  variantColor="red"
+                  isLoading={destroyLinkPayload.fetching}
+                  onClick={async () => await handleDestroyClick(link.id)}
+                >
+                  <Icon name="delete" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}

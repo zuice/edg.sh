@@ -39,5 +39,9 @@ export const permissions = shield({
     login: rules.isUnauthenticated,
     register: rules.isUnauthenticated,
     logout: rules.isAuthenticated,
+    createLink: rules.isAuthenticated,
+    createOrganization: rules.isAuthenticated,
+    destroyLink: rules.isAuthenticated,
+    destroyOrganization: rules.isAuthenticated,
   },
 });

@@ -84,8 +84,8 @@ mutation Logout {
   logout
 }
 
-mutation CreateLink($url: String!, $org: String) {
-  createLink(url: $url, org: $org) {
+mutation CreateLink($url: String!, $org: String, $slug: String) {
+  createLink(url: $url, org: $org, slug: $slug) {
     id
     slug
     url
@@ -103,10 +103,14 @@ mutation CreateOrganization($name: String!, $domain: String!) {
   }
 }
 
+mutation DestroyLink($id: String!) {
+  destroyLink(id: $id) {
+    id
+  }
+}
+
 mutation DestroyOrganization($id: String!) {
   destroyOrganization(id: $id) {
     id
-    name
-    domain
   }
 }
