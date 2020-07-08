@@ -12,6 +12,7 @@ import { prisma } from './lib/prisma';
 import { IToken } from './types/IToken';
 import { sendRefreshToken } from './utils/sendRefreshToken';
 import { createRefreshToken, createAccessToken } from './auth';
+import { getDomainWithoutProtocol } from './utils/getDomainWithoutProtocol';
 
 config();
 
@@ -83,7 +84,10 @@ app.get('/:slug', async (req: Request, res: Response) => {
 });
 app.get('/domain/:domain', async (req: Request, res: Response) => {
   const { domain } = req.params as { domain: string };
-  const organization = await prisma.organization.findOne({ where: { domain } });
+  const domainWithoutProtocol = getDomainWithoutProtocol(domain);
+  const organization = await prisma.organization.findOne({
+    where: { domain: domainWithoutProtocol },
+  });
 
   if (organization) {
     return res.sendStatus(200);
