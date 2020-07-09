@@ -43,7 +43,7 @@ type LinksWithOrganizationUser = Array<
 
 export const Links = () => {
   const [links, setLinks] = useState<LinksWithOrganizationUser>([]);
-  const [linksPayload] = useLinksQuery();
+  const [linksPayload] = useLinksQuery({ requestPolicy: 'cache-and-network' });
   const [destroyLinkPayload, getDestroyLinkPayload] = useDestroyLinkMutation();
   const [value, setValue] = useState('');
   const { onCopy, hasCopied } = useClipboard<string>(value);

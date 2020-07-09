@@ -36,7 +36,9 @@ export const Orgs = () => {
   const [organizations, setOrganizations] = useState<OrganizationsWithOwner>(
     [],
   );
-  const [organizationsPayload] = useOrganizationsQuery();
+  const [organizationsPayload] = useOrganizationsQuery({
+    requestPolicy: 'cache-and-network',
+  });
   const [
     destroyOrganizationPayload,
     getDestroyOrganizationPayload,
