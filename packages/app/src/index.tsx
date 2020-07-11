@@ -12,7 +12,7 @@ import { AppContextProvider } from './providers/AppContextProvider';
 import { App } from './components/App';
 
 render(
-  <ColorModeProvider>
+  <ColorModeProvider value="dark">
     <ThemeProvider theme={theme}>
       <CSSReset />
       <BrowserRouter>

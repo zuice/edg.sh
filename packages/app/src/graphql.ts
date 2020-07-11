@@ -102,11 +102,25 @@ export type OrganizationMembersArgs = {
   skip?: Maybe<Scalars['Int']>;
 };
 
+export type Product = {
+  __typename?: 'Product';
+  active: Scalars['Boolean'];
+  created: Scalars['Int'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  livemode: Scalars['Boolean'];
+  name: Scalars['String'];
+  status: Scalars['String'];
+  type: Scalars['String'];
+  updated: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
   links: Array<Link>;
   me?: Maybe<User>;
   organizations: Array<Organization>;
+  products: Array<Product>;
 };
 
 export type User = {

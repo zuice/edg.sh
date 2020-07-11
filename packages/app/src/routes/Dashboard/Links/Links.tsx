@@ -85,7 +85,7 @@ export const Links = () => {
     return (
       <Table width="100%">
         <TableHead>
-          <TableRow>
+          <TableRow index={0}>
             <TableHeader>Edge URL</TableHeader>
             <TableHeader>Org</TableHeader>
             <TableHeader>URL</TableHeader>
@@ -96,6 +96,7 @@ export const Links = () => {
           {linksPayload.data.links.map((link, index) => (
             <TableRow
               key={link.id}
+              index={index}
               backgroundColor={index % 2 ? 'gray.700' : 'gray.600'}
             >
               <TableCell>

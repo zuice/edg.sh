@@ -45,6 +45,17 @@ export interface NexusGenRootTypes {
     name: string; // String!
     ownerId: string; // String!
   }
+  Product: { // root type
+    active: boolean; // Boolean!
+    created: number; // Int!
+    description?: string | null; // String
+    id: string; // ID!
+    livemode: boolean; // Boolean!
+    name: string; // String!
+    status: string; // String!
+    type: string; // String!
+    updated: number; // Int!
+  }
   Query: {};
   User: { // root type
     createdAt: any; // DateTime!
@@ -101,10 +112,22 @@ export interface NexusGenFieldTypes {
     owner: NexusGenRootTypes['User']; // User!
     ownerId: string; // String!
   }
+  Product: { // field return type
+    active: boolean; // Boolean!
+    created: number; // Int!
+    description: string | null; // String
+    id: string; // ID!
+    livemode: boolean; // Boolean!
+    name: string; // String!
+    status: string; // String!
+    type: string; // String!
+    updated: number; // Int!
+  }
   Query: { // field return type
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     me: NexusGenRootTypes['User'] | null; // User
     organizations: NexusGenRootTypes['Organization'][]; // [Organization!]!
+    products: NexusGenRootTypes['Product'][]; // [Product!]!
   }
   User: { // field return type
     createdAt: any; // DateTime!
@@ -165,7 +188,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Organization" | "Query" | "User";
+export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Organization" | "Product" | "Query" | "User";
 
 export type NexusGenInputNames = never;
 

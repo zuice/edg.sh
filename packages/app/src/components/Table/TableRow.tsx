@@ -1,6 +1,27 @@
 import React, { FC } from 'react';
-import { BoxProps, Box } from '@chakra-ui/core';
+import { useColorMode, BoxProps, Box } from '@chakra-ui/core';
 
-export const TableRow: FC<BoxProps> = props => (
-  <Box as="tr" my={10} {...props} />
-);
+type TableRowProps = BoxProps & {
+  index: number;
+};
+
+export const TableRow: FC<TableRowProps> = props => {
+  const { colorMode } = useColorMode();
+
+  return (
+    <Box
+      as="tr"
+      my={10}
+      {...props}
+      backgroundColor={
+        props.index % 2
+          ? colorMode === 'dark'
+            ? 'gray.600'
+            : 'gray.200'
+          : colorMode === 'dark'
+          ? 'gray.700'
+          : 'gray.100'
+      }
+    />
+  );
+};

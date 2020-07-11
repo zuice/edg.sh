@@ -64,7 +64,7 @@ export const Orgs = () => {
     return (
       <Table width="100%">
         <TableHead>
-          <TableRow>
+          <TableRow index={0}>
             <TableHeader>Name</TableHeader>
             <TableHeader>Domain</TableHeader>
             <TableHeader>Owner</TableHeader>
@@ -73,10 +73,7 @@ export const Orgs = () => {
         </TableHead>
         <TableBody>
           {organizations.map((organization, index) => (
-            <TableRow
-              key={organization.id}
-              backgroundColor={index % 2 ? 'gray.700' : 'gray.600'}
-            >
+            <TableRow key={organization.id} index={index}>
               <TableCell>{organization.name}</TableCell>
               <TableCell>{organization.domain}</TableCell>
               <TableCell>{organization.owner.name}</TableCell>

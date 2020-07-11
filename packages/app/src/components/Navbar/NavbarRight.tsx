@@ -1,25 +1,31 @@
 import React, { useContext } from 'react';
 import {
+  useDisclosure,
+  useColorMode,
   Flex,
   Button,
   Modal,
-  useDisclosure,
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Icon,
 } from '@chakra-ui/core';
 
 import { AuthContext } from '../../context/AuthContext';
 
 export const NavbarRight = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode, toggleColorMode } = useColorMode();
   const { handleLogout } = useContext(AuthContext);
 
   return (
     <Flex width="20%" justifyContent="flex-end">
+      <Button onClick={toggleColorMode} marginRight={5}>
+        <Icon name={colorMode === 'dark' ? 'sun' : 'moon'} />
+      </Button>
       <Button leftIcon="external-link" variantColor="red" onClick={onOpen}>
         Logout
       </Button>

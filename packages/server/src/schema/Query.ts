@@ -15,6 +15,19 @@ export const Query = queryType({
       },
     });
 
+    t.field('products', {
+      type: 'Product',
+      list: true,
+      resolve: async (_parent, _args, ctx) => {
+        const plans = await ctx.stripe.products.list({
+          type: 'service',
+          active: true,
+        });
+
+        return plans.data;
+      },
+    });
+
     t.field('links', {
       type: 'Link',
       list: true,

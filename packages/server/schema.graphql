@@ -42,10 +42,23 @@ type Organization {
   ownerId: String!
 }
 
+type Product {
+  active: Boolean!
+  created: Int!
+  description: String
+  id: ID!
+  livemode: Boolean!
+  name: String!
+  status: String!
+  type: String!
+  updated: Int!
+}
+
 type Query {
   links: [Link!]!
   me: User
   organizations: [Organization!]!
+  products: [Product!]!
 }
 
 type User {
