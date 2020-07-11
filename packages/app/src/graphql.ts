@@ -110,8 +110,10 @@ export type Product = {
   id: Scalars['ID'];
   livemode: Scalars['Boolean'];
   name: Scalars['String'];
-  status: Scalars['String'];
+  object: Scalars['String'];
+  statement_descriptor?: Maybe<Scalars['String']>;
   type: Scalars['String'];
+  unit_label?: Maybe<Scalars['String']>;
   updated: Scalars['Int'];
 };
 
@@ -121,6 +123,7 @@ export type Query = {
   me?: Maybe<User>;
   organizations: Array<Organization>;
   products: Array<Product>;
+  users: Array<User>;
 };
 
 export type User = {

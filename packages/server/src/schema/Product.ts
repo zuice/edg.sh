@@ -9,8 +9,10 @@ export const Product = objectType({
     t.boolean('active');
     t.int('created');
     t.boolean('livemode');
+    t.string('statement_descriptor', { nullable: true });
+    t.string('unit_label', { nullable: true });
     t.string('name');
-    t.string('status');
+    t.string('object');
     t.string('type');
     t.int('updated');
   },

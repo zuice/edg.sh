@@ -52,8 +52,10 @@ export interface NexusGenRootTypes {
     id: string; // ID!
     livemode: boolean; // Boolean!
     name: string; // String!
-    status: string; // String!
+    object: string; // String!
+    statement_descriptor?: string | null; // String
     type: string; // String!
+    unit_label?: string | null; // String
     updated: number; // Int!
   }
   Query: {};
@@ -119,8 +121,10 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     livemode: boolean; // Boolean!
     name: string; // String!
-    status: string; // String!
+    object: string; // String!
+    statement_descriptor: string | null; // String
     type: string; // String!
+    unit_label: string | null; // String
     updated: number; // Int!
   }
   Query: { // field return type
@@ -128,6 +132,7 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     organizations: NexusGenRootTypes['Organization'][]; // [Organization!]!
     products: NexusGenRootTypes['Product'][]; // [Product!]!
+    users: NexusGenRootTypes['User'][]; // [User!]!
   }
   User: { // field return type
     createdAt: any; // DateTime!

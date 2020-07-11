@@ -4,6 +4,18 @@ import { getUserId } from '../utils/getUserId';
 
 export const Query = queryType({
   definition(t) {
+    t.field('users', {
+      type: 'User',
+      list: true,
+      resolve: async (_parent, _args, ctx) => {
+        const users = await ctx.prisma.user.findMany({
+          include: { links: true },
+        });
+
+        return users;
+      },
+    });
+
     t.field('me', {
       type: 'User',
       nullable: true,
