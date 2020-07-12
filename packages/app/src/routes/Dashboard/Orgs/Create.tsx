@@ -49,7 +49,7 @@ export const Create = () => {
       }
 
       if (values.domain.indexOf('edg.sh') >= 0) {
-        errors.name = "You can't use our domain.";
+        errors.domain = "You can't use our domain.";
       }
 
       return errors;
@@ -61,7 +61,15 @@ export const Create = () => {
 
   useEffect(() => {
     if (createOrganizationPayload.error) {
-      setErrors({ domain: 'Could not add URL, please check it.' });
+      if (
+        createOrganizationPayload.error.message.indexOf('Not Authorised!') >= 0
+      ) {
+        setErrors({
+          name: "You don't have permission for this action!",
+        });
+      } else {
+        setErrors({ domain: 'Could not add URL, please check it.' });
+      }
     }
 
     if (createOrganizationPayload.data) {

@@ -14,6 +14,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/core';
 import { StripeCardElementChangeEvent, Token } from '@stripe/stripe-js';
 import { useStripe, CardElement, useElements } from '@stripe/react-stripe-js';
@@ -82,14 +86,14 @@ export const Product: FC<ProductProps> = ({ product, current, disabled }) => {
       }
     } else if (disabled) {
       if (colorMode === 'dark') {
-        return theme.colors.gray[700];
+        return theme.colors.gray[900];
       } else {
         return theme.colors.gray[300];
       }
     }
 
     if (colorMode === 'dark') {
-      return theme.colors.gray[600];
+      return theme.colors.gray[700];
     } else {
       return theme.colors.gray[200];
     }
@@ -162,10 +166,24 @@ export const Product: FC<ProductProps> = ({ product, current, disabled }) => {
         <ModalOverlay />
         <ModalContent borderRadius="0.25rem">
           <ModalCloseButton onClick={onClose} />
-          {me!.stripeId ? (
+          {me?.stripeId ? (
             <>
               <ModalHeader>Subscription Confirmation</ModalHeader>
               <ModalBody>
+                {createSubscriptionPayload.error ? (
+                  <Alert
+                    width="100%"
+                    marginBottom={3}
+                    borderRadius={5}
+                    status="error"
+                  >
+                    <AlertIcon />
+                    <AlertTitle mr={2}>Error!</AlertTitle>
+                    <AlertDescription>
+                      We hit an error on our end. Please refresh and try again.
+                    </AlertDescription>
+                  </Alert>
+                ) : null}
                 Are you sure you would like to subscribe to {product.name}?
               </ModalBody>
               <ModalFooter>

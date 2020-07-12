@@ -31,12 +31,10 @@ export const StripeCard: FC<StripeCardProps> = ({ onChange }) => {
   };
 
   return (
-    <>
-      <CardElement
-        id="card-element"
-        options={CARD_ELEMENT_OPTIONS}
-        onChange={onChange}
-      />
-    </>
+    <CardElement
+      id="card-element"
+      options={CARD_ELEMENT_OPTIONS}
+      onChange={onChange}
+    />
   );
 };

@@ -7,6 +7,7 @@ import { IToken } from '../types/IToken';
 import { getUserId } from '../utils/getUserId';
 import { generateSlug } from '../utils/generateSlug';
 import { getDomainWithoutProtocol } from '../utils/getDomainWithoutProtocol';
+import Stripe from 'stripe';
 
 export const Mutation = mutationType({
   definition(t) {
@@ -103,12 +104,24 @@ export const Mutation = mutationType({
       resolve: async (_parent, { token, priceId }, ctx) => {
         const id = getUserId(ctx);
         const customer = await ctx.stripe.customers.create();
+        let source: Stripe.CustomerSource | null;
 
         if (token) {
-          await ctx.stripe.customers.createSource(customer.id, {
+          source = await ctx.stripe.customers.createSource(customer.id, {
             source: token,
           });
+
+          if (source) {
+            await ctx.stripe.customers.update(customer.id, {
+              default_source: source.id,
+            });
+          } else {
+            throw new Error(
+              "Your payment method could not be set on Stripe's side.",
+            );
+          }
         }
+
         await ctx.stripe.subscriptions.create({
           customer: customer.id,
           items: [{ price: priceId }],

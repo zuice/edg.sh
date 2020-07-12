@@ -12,7 +12,7 @@ export const Container: FC<IContainerProps> = ({
   alignItems,
 }) => (
   <Flex
-    width={['95%', '95%', '75%']}
+    width={['95%', '95%', '95%', '95%', '75%']}
     maxWidth={1400}
     height="100%"
     margin="0 auto"
