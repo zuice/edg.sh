@@ -23,7 +23,7 @@ export const NavbarRight = () => {
 
   return (
     <Flex width={['50%', '50%', '50%', '20%']} justifyContent="flex-end">
-      <Button onClick={toggleColorMode} marginRight={5}>
+      <Button onClick={toggleColorMode} marginRight={1}>
         <Icon name={colorMode === 'dark' ? 'sun' : 'moon'} />
       </Button>
       <Button leftIcon="external-link" variantColor="red" onClick={onOpen}>
@@ -42,7 +42,7 @@ export const NavbarRight = () => {
             <Button
               variantColor="red"
               leftIcon="external-link"
-              marginLeft="10px"
+              marginLeft={3}
               onClick={handleLogout}
             >
               Yes

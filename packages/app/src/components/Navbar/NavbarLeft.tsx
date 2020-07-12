@@ -25,7 +25,7 @@ export const NavbarLeft = () => {
           aria-label="open-menu"
           icon="settings"
           display={{ sm: 'inherit', md: 'none' }}
-          marginRight={3}
+          marginRight={{ xs: 1, sm: 3 }}
           onClick={onToggle}
         />
         <Link to="/">
