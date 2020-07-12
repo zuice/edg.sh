@@ -35,7 +35,7 @@ jobs:
           REACT_APP_GRAPHQL_URL: https://api.edg.sh
       - run: npm i -g lerna
       - run: npm run bootstrap
-      - run: npm run build:app
+      - run: REACT_APP_STRIPE_PUBLISHABLE_KEY=${{ secrets.REACT_APP_STRIPE_PUBLISHABLE_KEY }} npm run build:app
       - name: Build with netlify
         uses: netlify/actions/cli@master
         with:
