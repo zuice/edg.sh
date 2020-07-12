@@ -50,6 +50,8 @@ export const ProductList: FC<ProductListProps> = ({
         />
       ))}
       <Product
+        disabled
+        comingSoon
         product={{
           id: 'test',
           name: 'Edg.sh Business',

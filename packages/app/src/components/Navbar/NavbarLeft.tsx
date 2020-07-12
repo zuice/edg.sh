@@ -1,59 +1,50 @@
 import React from 'react';
-import { Flex, Heading } from '@chakra-ui/core';
-import { useHistory } from 'react-router-dom';
+import {
+  useDisclosure,
+  Flex,
+  Heading,
+  IconButton,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+} from '@chakra-ui/core';
 
 import { Link } from '../Link';
-import { ButtonLink } from '../ButtonLink';
+import { ButtonLinks } from './ButtonLinks';
 
 export const NavbarLeft = () => {
-  const history = useHistory();
+  const { isOpen, onToggle, onClose } = useDisclosure(false);
 
   return (
-    <Flex width="100%">
-      <Link to="/">
-        <Heading size="xl">edg.sh</Heading>
-      </Link>
-      <ButtonLink
-        to="/links"
-        leftIcon="link"
-        variant={
-          history.location.pathname.indexOf('links') >= 0 ? 'solid' : 'ghost'
-        }
-        variantColor={
-          history.location.pathname.indexOf('links') >= 0 ? 'green' : undefined
-        }
-        marginLeft="10px"
-      >
-        My Links
-      </ButtonLink>
-      <ButtonLink
-        to="/orgs"
-        leftIcon="chat"
-        variant={
-          history.location.pathname.indexOf('orgs') >= 0 ? 'solid' : 'ghost'
-        }
-        variantColor={
-          history.location.pathname.indexOf('orgs') >= 0 ? 'green' : undefined
-        }
-        marginLeft="10px"
-      >
-        My Orgs
-      </ButtonLink>
-      <ButtonLink
-        to="/upgrade"
-        leftIcon="star"
-        variant={
-          history.location.pathname.indexOf('upgrade') >= 0 ? 'solid' : 'ghost'
-        }
-        variantColor={
-          history.location.pathname.indexOf('upgrade') >= 0
-            ? 'green'
-            : undefined
-        }
-        marginLeft="10px"
-      >
-        Upgrade
-      </ButtonLink>
-    </Flex>
+    <>
+      <Flex width="100%">
+        <IconButton
+          aria-label="open-menu"
+          icon="settings"
+          display={{ sm: 'inherit', md: 'none' }}
+          marginRight={3}
+          onClick={onToggle}
+        />
+        <Link to="/">
+          <Heading size="xl">edg.sh</Heading>
+        </Link>
+        <ButtonLinks />
+      </Flex>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Menu</DrawerHeader>
+          <DrawerBody>
+            <Flex width="100%" direction="column">
+              <ButtonLinks mobile />
+            </Flex>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };

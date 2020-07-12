@@ -39,9 +39,15 @@ interface ProductProps {
   };
   current?: boolean;
   disabled?: boolean;
+  comingSoon?: boolean;
 }
 
-export const Product: FC<ProductProps> = ({ product, current, disabled }) => {
+export const Product: FC<ProductProps> = ({
+  product,
+  current,
+  disabled,
+  comingSoon,
+}) => {
   const [
     createSubscriptionPayload,
     getCreateSubscriptionPayload,
@@ -158,7 +164,11 @@ export const Product: FC<ProductProps> = ({ product, current, disabled }) => {
             isDisabled={current || disabled}
             onClick={current || disabled ? undefined : onOpen}
           >
-            {current || disabled ? 'Subscribed' : 'Subscribe'}
+            {comingSoon
+              ? 'Coming Soon'
+              : current || disabled
+              ? 'Subscribed'
+              : 'Subscribe'}
           </Button>
         </Box>
       </Flex>

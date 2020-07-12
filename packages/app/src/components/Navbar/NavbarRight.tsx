@@ -22,7 +22,7 @@ export const NavbarRight = () => {
   const { handleLogout } = useContext(AuthContext);
 
   return (
-    <Flex width="20%" justifyContent="flex-end">
+    <Flex width={['50%', '50%', '50%', '20%']} justifyContent="flex-end">
       <Button onClick={toggleColorMode} marginRight={5}>
         <Icon name={colorMode === 'dark' ? 'sun' : 'moon'} />
       </Button>
