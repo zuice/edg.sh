@@ -151,7 +151,7 @@ export const Links = () => {
         <AlertIcon />
         <AlertTitle mr={2}>Error!</AlertTitle>
         <AlertDescription>
-          We had an issue grabbing your links.
+          Your token may have expired. Please refresh.
         </AlertDescription>
         <CloseButton position="absolute" right="8px" top="8px" />
       </Alert>

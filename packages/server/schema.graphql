@@ -23,11 +23,11 @@ type Link {
 type Mutation {
   createLink(org: String, slug: String, url: String!): Link!
   createOrganization(domain: String!, name: String!): Organization!
+  createSubscription(priceId: String!, token: String): Boolean!
   destroyLink(id: String!): Link!
   destroyOrganization(id: String!): Organization!
   login(email: String!, password: String!): AuthPayload!
   logout: Boolean!
-  refresh: AuthPayload!
   register(email: String!, name: String!, password: String!): AuthPayload!
 }
 
@@ -42,6 +42,14 @@ type Organization {
   ownerId: String!
 }
 
+type Price {
+  active: Boolean!
+  id: ID!
+  object: String!
+  product: String!
+  unitAmount: Int
+}
+
 type Product {
   active: Boolean!
   created: Int!
@@ -50,9 +58,8 @@ type Product {
   livemode: Boolean!
   name: String!
   object: String!
-  statement_descriptor: String
+  prices: [Price!]!
   type: String!
-  unit_label: String
   updated: Int!
 }
 
@@ -61,6 +68,7 @@ type Query {
   me: User
   organizations: [Organization!]!
   products: [Product!]!
+  subscriptions: [Product!]!
   users: [User!]!
 }
 
@@ -70,7 +78,6 @@ type User {
   id: String!
   links(skip: Int): [Link!]!
   name: String!
-  password: String!
   stripeId: String
   tokenVersion: Int!
 }

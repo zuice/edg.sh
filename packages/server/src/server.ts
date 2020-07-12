@@ -55,7 +55,7 @@ app.express.post('/refresh', async (req: Request, res: Response) => {
 
     sendRefreshToken(res, createRefreshToken(user));
 
-    return res.json({ token: createAccessToken(user) });
+    return res.json({ user, token: createAccessToken(user) });
   } catch (_) {
     return res.json({ token: '' });
   }

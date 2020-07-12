@@ -34,11 +34,13 @@ export const permissions = shield({
   Query: {
     me: rules.isAuthenticated,
     links: rules.isAuthenticated,
+    subscriptions: rules.isAuthenticated,
   },
   Mutation: {
     login: rules.isUnauthenticated,
     register: rules.isUnauthenticated,
     logout: rules.isAuthenticated,
+    createSubscription: rules.isAuthenticated,
     createLink: rules.isAuthenticated,
     createOrganization: rules.isAuthenticated,
     destroyLink: rules.isAuthenticated,

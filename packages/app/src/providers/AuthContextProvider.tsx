@@ -15,7 +15,7 @@ import {
 } from '../graphql';
 
 export const AuthContextProvider: FC = ({ children }) => {
-  const { accessToken, setAccessToken } = useContext(AppContext);
+  const { accessToken, setAccessToken, setMe } = useContext(AppContext);
   const [urqlLoginPayload, getLoginPayload] = useLoginMutation();
   const [loginPayload, setLoginPayload] = useState<
     UseMutationState<LoginMutation>
@@ -39,9 +39,10 @@ export const AuthContextProvider: FC = ({ children }) => {
   useEffect(() => {
     const getRefreshToken = async () => {
       try {
-        const token = await fetchRefreshToken();
+        const { token, user } = await fetchRefreshToken();
 
         setAccessToken(token !== '' ? token : '');
+        setMe(user);
         setIsLoading(false);
       } catch (_) {
         setIsLoading(false);
@@ -49,7 +50,7 @@ export const AuthContextProvider: FC = ({ children }) => {
     };
 
     getRefreshToken();
-  }, [setAccessToken]);
+  }, [setAccessToken, setMe]);
 
   useEffect(() => {
     if (urqlLoginPayload.data && !urqlLoginPayload.fetching) {

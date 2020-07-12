@@ -45,6 +45,13 @@ export interface NexusGenRootTypes {
     name: string; // String!
     ownerId: string; // String!
   }
+  Price: { // root type
+    active: boolean; // Boolean!
+    id: string; // ID!
+    object: string; // String!
+    product: string; // String!
+    unitAmount?: number | null; // Int
+  }
   Product: { // root type
     active: boolean; // Boolean!
     created: number; // Int!
@@ -53,9 +60,7 @@ export interface NexusGenRootTypes {
     livemode: boolean; // Boolean!
     name: string; // String!
     object: string; // String!
-    statement_descriptor?: string | null; // String
     type: string; // String!
-    unit_label?: string | null; // String
     updated: number; // Int!
   }
   Query: {};
@@ -64,7 +69,6 @@ export interface NexusGenRootTypes {
     email: string; // String!
     id: string; // String!
     name: string; // String!
-    password: string; // String!
     stripeId?: string | null; // String
     tokenVersion: number; // Int!
   }
@@ -97,11 +101,11 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createLink: NexusGenRootTypes['Link']; // Link!
     createOrganization: NexusGenRootTypes['Organization']; // Organization!
+    createSubscription: boolean; // Boolean!
     destroyLink: NexusGenRootTypes['Link']; // Link!
     destroyOrganization: NexusGenRootTypes['Organization']; // Organization!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: boolean; // Boolean!
-    refresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Organization: { // field return type
@@ -114,6 +118,13 @@ export interface NexusGenFieldTypes {
     owner: NexusGenRootTypes['User']; // User!
     ownerId: string; // String!
   }
+  Price: { // field return type
+    active: boolean; // Boolean!
+    id: string; // ID!
+    object: string; // String!
+    product: string; // String!
+    unitAmount: number | null; // Int
+  }
   Product: { // field return type
     active: boolean; // Boolean!
     created: number; // Int!
@@ -122,9 +133,8 @@ export interface NexusGenFieldTypes {
     livemode: boolean; // Boolean!
     name: string; // String!
     object: string; // String!
-    statement_descriptor: string | null; // String
+    prices: NexusGenRootTypes['Price'][]; // [Price!]!
     type: string; // String!
-    unit_label: string | null; // String
     updated: number; // Int!
   }
   Query: { // field return type
@@ -132,6 +142,7 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     organizations: NexusGenRootTypes['Organization'][]; // [Organization!]!
     products: NexusGenRootTypes['Product'][]; // [Product!]!
+    subscriptions: NexusGenRootTypes['Product'][]; // [Product!]!
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
   User: { // field return type
@@ -140,7 +151,6 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
-    password: string; // String!
     stripeId: string | null; // String
     tokenVersion: number; // Int!
   }
@@ -156,6 +166,10 @@ export interface NexusGenArgTypes {
     createOrganization: { // args
       domain: string; // String!
       name: string; // String!
+    }
+    createSubscription: { // args
+      priceId: string; // String!
+      token?: string | null; // String
     }
     destroyLink: { // args
       id: string; // String!
@@ -193,7 +207,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Organization" | "Product" | "Query" | "User";
+export type NexusGenObjectNames = "AuthPayload" | "Link" | "Mutation" | "Organization" | "Price" | "Product" | "Query" | "User";
 
 export type NexusGenInputNames = never;
 

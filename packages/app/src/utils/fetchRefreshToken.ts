@@ -1,7 +1,11 @@
 import axios from 'axios';
+import { User } from '../graphql';
 
 export const fetchRefreshToken = async () => {
-  const response = await axios.post<{ token: string }>(
+  const response = await axios.post<{
+    token: string;
+    user: Pick<User, 'id' | 'name' | 'email' | 'stripeId'>;
+  }>(
     '/refresh',
     {},
     {
@@ -12,7 +16,7 @@ export const fetchRefreshToken = async () => {
       withCredentials: true,
     },
   );
-  const { token } = response.data;
+  const data = response.data;
 
-  return token;
+  return data;
 };

@@ -94,24 +94,27 @@ export const Mutation = mutationType({
       },
     });
 
-    t.field('refresh', {
-      type: 'AuthPayload',
-      resolve: async (_parent, _args, ctx) => {
-        const refreshToken = ctx.request.cookies.jid;
-        const payload = verify(refreshToken, process.env.APP_SECRET!) as IToken;
-        const user = await ctx.prisma.user.findOne({
-          where: { id: payload.user.id },
+    t.field('createSubscription', {
+      type: 'Boolean',
+      args: {
+        token: stringArg({ nullable: true }),
+        priceId: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { token, priceId }, ctx) => {
+        const id = getUserId(ctx);
+        const customer = await ctx.stripe.customers.create();
+
+        await ctx.stripe.customers.createSource(customer.id, { source: token });
+        await ctx.stripe.subscriptions.create({
+          customer: customer.id,
+          items: [{ price: priceId }],
+        });
+        await ctx.prisma.user.update({
+          where: { id },
+          data: { stripeId: customer.id },
         });
 
-        if (!user) {
-          throw new Error('User not found');
-        }
-
-        sendRefreshToken(ctx.response, createRefreshToken(user));
-
-        const token = createAccessToken(user);
-
-        return { token, user };
+        return true;
       },
     });
 

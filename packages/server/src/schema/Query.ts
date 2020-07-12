@@ -27,6 +27,25 @@ export const Query = queryType({
       },
     });
 
+    t.field('subscriptions', {
+      type: 'Product',
+      list: true,
+      resolve: async (_parent, _args, ctx) => {
+        const id = getUserId(ctx);
+        const user = await ctx.prisma.user.findOne({ where: { id } });
+        const subscriptions = await ctx.stripe.subscriptions.list({
+          customer: user?.stripeId ? user?.stripeId : undefined,
+        });
+        const products = subscriptions.data.map(async subscription => {
+          const productId = subscription.plan?.product as string;
+
+          return await ctx.stripe.products.retrieve(productId, {});
+        });
+
+        return products;
+      },
+    });
+
     t.field('products', {
       type: 'Product',
       list: true,

@@ -53,6 +53,32 @@ query OrganizationsDropdown {
   }
 }
 
+query Products {
+  products {
+    id
+    name
+    description
+    active
+    livemode
+    prices {
+      id
+      unitAmount
+    }
+  }
+  subscriptions {
+    id
+  }
+}
+
+query Me {
+  me {
+    id
+    email
+    name
+    stripeId
+  }
+}
+
 mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     token
@@ -71,17 +97,12 @@ mutation Register($name: String!, $email: String!, $password: String!) {
   }
 }
 
-mutation Refresh {
-  refresh {
-    token
-    user {
-      id
-    }
-  }
-}
-
 mutation Logout {
   logout
+}
+
+mutation CreateSubscription($token: String, $priceId: String!) {
+  createSubscription(token: $token, priceId: $priceId)
 }
 
 mutation CreateLink($url: String!, $org: String, $slug: String) {

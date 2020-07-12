@@ -36,11 +36,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   createLink: Link;
   createOrganization: Organization;
+  createSubscription: Scalars['Boolean'];
   destroyLink: Link;
   destroyOrganization: Organization;
   login: AuthPayload;
   logout: Scalars['Boolean'];
-  refresh: AuthPayload;
   register: AuthPayload;
 };
 
@@ -55,6 +55,12 @@ export type MutationCreateLinkArgs = {
 export type MutationCreateOrganizationArgs = {
   domain: Scalars['String'];
   name: Scalars['String'];
+};
+
+
+export type MutationCreateSubscriptionArgs = {
+  priceId: Scalars['String'];
+  token?: Maybe<Scalars['String']>;
 };
 
 
@@ -102,6 +108,15 @@ export type OrganizationMembersArgs = {
   skip?: Maybe<Scalars['Int']>;
 };
 
+export type Price = {
+  __typename?: 'Price';
+  active: Scalars['Boolean'];
+  id: Scalars['ID'];
+  object: Scalars['String'];
+  product: Scalars['String'];
+  unitAmount?: Maybe<Scalars['Int']>;
+};
+
 export type Product = {
   __typename?: 'Product';
   active: Scalars['Boolean'];
@@ -111,9 +126,8 @@ export type Product = {
   livemode: Scalars['Boolean'];
   name: Scalars['String'];
   object: Scalars['String'];
-  statement_descriptor?: Maybe<Scalars['String']>;
+  prices: Array<Price>;
   type: Scalars['String'];
-  unit_label?: Maybe<Scalars['String']>;
   updated: Scalars['Int'];
 };
 
@@ -123,6 +137,7 @@ export type Query = {
   me?: Maybe<User>;
   organizations: Array<Organization>;
   products: Array<Product>;
+  subscriptions: Array<Product>;
   users: Array<User>;
 };
 
@@ -133,7 +148,6 @@ export type User = {
   id: Scalars['String'];
   links: Array<Link>;
   name: Scalars['String'];
-  password: Scalars['String'];
   stripeId?: Maybe<Scalars['String']>;
   tokenVersion: Scalars['Int'];
 };
@@ -197,6 +211,35 @@ export type OrganizationsDropdownQuery = (
   )> }
 );
 
+export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProductsQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name' | 'description' | 'active' | 'livemode'>
+    & { prices: Array<(
+      { __typename?: 'Price' }
+      & Pick<Price, 'id' | 'unitAmount'>
+    )> }
+  )>, subscriptions: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+  )> }
+);
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'name' | 'stripeId'>
+  )> }
+);
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -234,27 +277,23 @@ export type RegisterMutation = (
   ) }
 );
 
-export type RefreshMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type RefreshMutation = (
-  { __typename?: 'Mutation' }
-  & { refresh: (
-    { __typename?: 'AuthPayload' }
-    & Pick<AuthPayload, 'token'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    ) }
-  ) }
-);
-
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type CreateSubscriptionMutationVariables = Exact<{
+  token?: Maybe<Scalars['String']>;
+  priceId: Scalars['String'];
+}>;
+
+
+export type CreateSubscriptionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createSubscription'>
 );
 
 export type CreateLinkMutationVariables = Exact<{
@@ -387,6 +426,42 @@ export const OrganizationsDropdownDocument = gql`
 export function useOrganizationsDropdownQuery(options: Omit<Urql.UseQueryArgs<OrganizationsDropdownQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<OrganizationsDropdownQuery>({ query: OrganizationsDropdownDocument, ...options });
 };
+export const ProductsDocument = gql`
+    query Products {
+  products {
+    id
+    name
+    description
+    active
+    livemode
+    prices {
+      id
+      unitAmount
+    }
+  }
+  subscriptions {
+    id
+  }
+}
+    `;
+
+export function useProductsQuery(options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+};
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    email
+    name
+    stripeId
+  }
+}
+    `;
+
+export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -415,20 +490,6 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
-export const RefreshDocument = gql`
-    mutation Refresh {
-  refresh {
-    token
-    user {
-      id
-    }
-  }
-}
-    `;
-
-export function useRefreshMutation() {
-  return Urql.useMutation<RefreshMutation, RefreshMutationVariables>(RefreshDocument);
-};
 export const LogoutDocument = gql`
     mutation Logout {
   logout
@@ -437,6 +498,15 @@ export const LogoutDocument = gql`
 
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
+export const CreateSubscriptionDocument = gql`
+    mutation CreateSubscription($token: String, $priceId: String!) {
+  createSubscription(token: $token, priceId: $priceId)
+}
+    `;
+
+export function useCreateSubscriptionMutation() {
+  return Urql.useMutation<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>(CreateSubscriptionDocument);
 };
 export const CreateLinkDocument = gql`
     mutation CreateLink($url: String!, $org: String, $slug: String) {
