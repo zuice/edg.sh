@@ -2,7 +2,7 @@ import { mutationType, stringArg } from '@nexus/schema';
 import { compare, hash } from 'bcryptjs';
 import { sendRefreshToken } from '../utils/sendRefreshToken';
 import { createRefreshToken, createAccessToken } from '../auth';
-import { verify, decode } from 'jsonwebtoken';
+import { decode } from 'jsonwebtoken';
 import { IToken } from '../types/IToken';
 import { getUserId } from '../utils/getUserId';
 import { generateSlug } from '../utils/generateSlug';
@@ -104,7 +104,11 @@ export const Mutation = mutationType({
         const id = getUserId(ctx);
         const customer = await ctx.stripe.customers.create();
 
-        await ctx.stripe.customers.createSource(customer.id, { source: token });
+        if (token) {
+          await ctx.stripe.customers.createSource(customer.id, {
+            source: token,
+          });
+        }
         await ctx.stripe.subscriptions.create({
           customer: customer.id,
           items: [{ price: priceId }],
