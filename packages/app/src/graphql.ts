@@ -253,7 +253,7 @@ export type LoginMutation = (
     & Pick<AuthPayload, 'token'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id'>
+      & Pick<User, 'id' | 'name' | 'email' | 'stripeId'>
     ) }
   ) }
 );
@@ -272,7 +272,7 @@ export type RegisterMutation = (
     & Pick<AuthPayload, 'token'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id'>
+      & Pick<User, 'id' | 'name' | 'email' | 'stripeId'>
     ) }
   ) }
 );
@@ -468,6 +468,9 @@ export const LoginDocument = gql`
     token
     user {
       id
+      name
+      email
+      stripeId
     }
   }
 }
@@ -482,6 +485,9 @@ export const RegisterDocument = gql`
     token
     user {
       id
+      name
+      email
+      stripeId
     }
   }
 }
