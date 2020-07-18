@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useState, useEffect } from 'react';
 import {
   useColorMode,
   useDisclosure,
@@ -56,6 +56,7 @@ export const Product: FC<ProductProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { me } = useContext(AppContext);
   const [error, setError] = useState<string>();
+  const [subscribed, setSubscribed] = useState(current);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -67,7 +68,7 @@ export const Product: FC<ProductProps> = ({
     : 'Free';
 
   const handleBackgroundColor = () => {
-    if (current) {
+    if (subscribed) {
       if (colorMode === 'dark') {
         return theme.colors.green[900];
       } else {
@@ -84,7 +85,7 @@ export const Product: FC<ProductProps> = ({
     return undefined;
   };
   const handleBorderColor = () => {
-    if (current) {
+    if (subscribed) {
       if (colorMode === 'dark') {
         return theme.colors.green[600];
       } else {
@@ -131,6 +132,12 @@ export const Product: FC<ProductProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (createSubscriptionPayload.data) {
+      setSubscribed(true);
+    }
+  }, [createSubscriptionPayload, setSubscribed]);
+
   return (
     <>
       <Flex
@@ -160,13 +167,13 @@ export const Product: FC<ProductProps> = ({
         <Box marginTop={3}>
           <Button
             variantColor="green"
-            leftIcon={current || disabled ? 'unlock' : 'lock'}
-            isDisabled={current || disabled}
-            onClick={current || disabled ? undefined : onOpen}
+            leftIcon={subscribed || disabled ? 'unlock' : 'lock'}
+            isDisabled={subscribed || disabled}
+            onClick={subscribed || disabled ? undefined : onOpen}
           >
             {comingSoon
               ? 'Coming Soon'
-              : current || disabled
+              : subscribed || disabled
               ? 'Subscribed'
               : 'Subscribe'}
           </Button>
@@ -239,11 +246,9 @@ export const Product: FC<ProductProps> = ({
                     leftIcon="unlock"
                     marginLeft="10px"
                     isLoading={createSubscriptionPayload.fetching}
-                    isDisabled={!!createSubscriptionPayload.data}
+                    isDisabled={subscribed}
                   >
-                    {!!createSubscriptionPayload.data
-                      ? 'Subscribed'
-                      : 'Subscribe'}
+                    {subscribed ? 'Subscribed' : 'Subscribe'}
                   </Button>
                 </ModalFooter>
               </form>

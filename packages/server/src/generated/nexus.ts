@@ -101,7 +101,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createLink: NexusGenRootTypes['Link']; // Link!
     createOrganization: NexusGenRootTypes['Organization']; // Organization!
-    createSubscription: boolean; // Boolean!
+    createSubscription: string; // String!
     destroyLink: NexusGenRootTypes['Link']; // Link!
     destroyOrganization: NexusGenRootTypes['Organization']; // Organization!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!

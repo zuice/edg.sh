@@ -36,7 +36,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createLink: Link;
   createOrganization: Organization;
-  createSubscription: Scalars['Boolean'];
+  createSubscription: Scalars['String'];
   destroyLink: Link;
   destroyOrganization: Organization;
   login: AuthPayload;

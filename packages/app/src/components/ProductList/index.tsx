@@ -42,31 +42,13 @@ export const ProductList: FC<ProductListProps> = ({
           ],
         }}
       />
-      {products.map(product => (
+      {products.reverse().map(product => (
         <Product
           current={idsList.indexOf(product.id) >= 0}
           key={product.id}
           product={product}
         />
       ))}
-      <Product
-        disabled
-        comingSoon
-        product={{
-          id: 'test',
-          name: 'Edg.sh Business',
-          description:
-            'The plan for businesses who need to cover multiple domains, and support lots of traffic.',
-          active: true,
-          livemode: false,
-          prices: [
-            {
-              id: 'business',
-              unitAmount: 1999,
-            },
-          ],
-        }}
-      />
     </Grid>
   );
 };

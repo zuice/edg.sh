@@ -96,30 +96,39 @@ export const Mutation = mutationType({
     });
 
     t.field('createSubscription', {
-      type: 'Boolean',
+      type: 'String',
       args: {
         token: stringArg({ nullable: true }),
         priceId: stringArg({ nullable: false }),
       },
       resolve: async (_parent, { token, priceId }, ctx) => {
         const id = getUserId(ctx);
-        const customer = await ctx.stripe.customers.create();
-        let source: Stripe.CustomerSource | null;
+        const user = await ctx.prisma.user.findOne({ where: { id } });
+        let customer: Stripe.Customer;
 
-        if (token) {
-          source = await ctx.stripe.customers.createSource(customer.id, {
-            source: token,
-          });
+        if (user?.stripeId) {
+          const potentialCustomer = await ctx.stripe.customers.retrieve(
+            user.stripeId,
+          );
 
-          if (source) {
-            await ctx.stripe.customers.update(customer.id, {
-              default_source: source.id,
-            });
+          if (!potentialCustomer.deleted) {
+            customer = potentialCustomer;
           } else {
-            throw new Error(
-              "Your payment method could not be set on Stripe's side.",
-            );
+            throw new Error('Your account has been mysteriously deleted.');
           }
+
+          if (customer.subscriptions) {
+            customer.subscriptions.data.forEach(async subscription => {
+              await ctx.stripe.subscriptions.update(subscription.id, {
+                cancel_at_period_end: true,
+              });
+            });
+          }
+        } else {
+          customer = await ctx.stripe.customers.create({
+            source: token as string | undefined,
+            email: user?.email,
+          });
         }
 
         await ctx.stripe.subscriptions.create({
@@ -131,7 +140,7 @@ export const Mutation = mutationType({
           data: { stripeId: customer.id },
         });
 
-        return true;
+        return customer.id;
       },
     });
 

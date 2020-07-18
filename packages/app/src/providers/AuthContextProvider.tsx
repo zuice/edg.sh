@@ -29,7 +29,7 @@ export const AuthContextProvider: FC = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken !== '') {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -54,23 +54,25 @@ export const AuthContextProvider: FC = ({ children }) => {
 
   useEffect(() => {
     if (urqlLoginPayload.data && !urqlLoginPayload.fetching) {
-      const { token } = urqlLoginPayload.data.login;
+      const { token, user } = urqlLoginPayload.data.login;
 
       setAccessToken(token);
+      setMe(user);
     }
 
     setLoginPayload(urqlLoginPayload);
-  }, [urqlLoginPayload, setAccessToken]);
+  }, [urqlLoginPayload, setAccessToken, setMe]);
 
   useEffect(() => {
     if (urqlRegisterPayload.data && !urqlRegisterPayload.fetching) {
-      const { token } = urqlRegisterPayload.data.register;
+      const { token, user } = urqlRegisterPayload.data.register;
 
       setAccessToken(token);
+      setMe(user);
     }
 
     setRegisterPayload(urqlRegisterPayload);
-  }, [urqlRegisterPayload, setAccessToken]);
+  }, [urqlRegisterPayload, setAccessToken, setMe]);
 
   const handleLogin = (values: LoginMutationVariables) => {
     getLoginPayload(values, { requestPolicy: 'network-only' });
