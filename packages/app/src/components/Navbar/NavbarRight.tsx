@@ -32,7 +32,7 @@ export const NavbarRight = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent borderRadius="0.25rem">
-          <ModalCloseButton />
+          <ModalCloseButton onClick={onClose} />
           <ModalHeader>Logout</ModalHeader>
           <ModalBody>Are you sure you would like to logout?</ModalBody>
           <ModalFooter>

@@ -14,9 +14,8 @@ export const ButtonLinks: FC<ButtonLinksProps> = ({ mobile }) => {
     <>
       <ButtonLink
         to="/links"
-        display={
-          !mobile ? { xs: 'none', sm: 'none', md: 'inherit' } : undefined
-        }
+        display={!mobile ? { xs: 'none', sm: 'none', md: 'flex' } : 'flex'}
+        justifyContent={mobile ? 'flex-start' : 'center'}
         marginBottom={mobile ? 3 : undefined}
         marginLeft={!mobile ? 3 : undefined}
         leftIcon="link"
@@ -31,9 +30,8 @@ export const ButtonLinks: FC<ButtonLinksProps> = ({ mobile }) => {
       </ButtonLink>
       <ButtonLink
         to="/orgs"
-        display={
-          !mobile ? { xs: 'none', sm: 'none', md: 'inherit' } : undefined
-        }
+        display={!mobile ? { xs: 'none', sm: 'none', md: 'flex' } : 'flex'}
+        justifyContent={mobile ? 'flex-start' : 'center'}
         marginBottom={mobile ? 3 : undefined}
         marginLeft={!mobile ? 3 : undefined}
         leftIcon="chat"
@@ -49,9 +47,8 @@ export const ButtonLinks: FC<ButtonLinksProps> = ({ mobile }) => {
       <ButtonLink
         to="/upgrade"
         width={mobile ? '100%' : undefined}
-        display={
-          !mobile ? { xs: 'none', sm: 'none', md: 'inherit' } : undefined
-        }
+        display={!mobile ? { xs: 'none', sm: 'none', md: 'flex' } : 'flex'}
+        justifyContent={mobile ? 'flex-start' : 'center'}
         marginBottom={mobile ? 3 : undefined}
         marginLeft={!mobile ? 3 : undefined}
         leftIcon="star"

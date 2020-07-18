@@ -10,6 +10,7 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
+  Grid,
 } from '@chakra-ui/core';
 
 import { Link } from '../Link';
@@ -23,7 +24,7 @@ export const NavbarLeft = () => {
       <Flex width="100%">
         <IconButton
           aria-label="open-menu"
-          icon="settings"
+          icon={isOpen ? 'arrow-back' : 'arrow-forward'}
           display={{ sm: 'inherit', md: 'none' }}
           marginRight={{ xs: 1, sm: 3 }}
           onClick={onToggle}
@@ -39,9 +40,9 @@ export const NavbarLeft = () => {
           <DrawerCloseButton />
           <DrawerHeader>Menu</DrawerHeader>
           <DrawerBody>
-            <Flex width="100%" direction="column">
+            <Grid width="100%">
               <ButtonLinks mobile />
-            </Flex>
+            </Grid>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
